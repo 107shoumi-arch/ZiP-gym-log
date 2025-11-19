@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V27 (v25 Visuals + Fixed Reset) === */
+  /* === ESPORTS THEME V27 (LAYOUT LOCKED + RESET FIXED) === */
   :root {
     --bg: #121212;
     --card: #1e1e1e;
@@ -21,7 +21,7 @@
   
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Roboto Mono', monospace;
-    margin: 0; padding: 1.2rem; 
+    margin: 0; padding: 1rem; 
     padding-bottom: 220px; 
     background-color: var(--bg); color: var(--text-main); 
     display: flex; justify-content: center;
@@ -30,62 +30,87 @@
   .shell { width: 100%; max-width: 600px; }
 
   h1 { 
-    font-size: 1.6rem; text-align: center; margin: 0 0 1.5rem; letter-spacing: 3px; color: var(--text-sub); font-weight: 700;
-    border-bottom: 2px solid var(--accent); display: inline-block; width: 100%; padding-bottom: 10px;
+    font-size: 1.6rem; text-align: center; margin: 10px 0 1.5rem; 
+    letter-spacing: 2px; color: var(--text-sub); font-weight: 700;
+    border-bottom: 2px solid var(--accent); display: block; width: 100%; padding-bottom: 10px;
+    line-height: 1.3;
   }
   
   section {
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
-    margin-bottom: 1.2rem; padding: 1.4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    margin-bottom: 1.2rem; padding: 1.2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
   }
   
   h2 { 
-    font-size: 0.95rem; margin: 0 0 20px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.95rem; margin: 0 0 15px 0; display: flex; justify-content: space-between; align-items: center;
     color: var(--text-main); font-weight: 600; border-left: 4px solid var(--accent); padding-left: 12px; letter-spacing: 1px;
   }
   h2 small { font-size: 0.75rem; color: var(--text-sub); font-weight: 400; }
 
-  label { display: block; font-size: 0.8rem; color: var(--accent); margin-bottom: 6px; font-family: 'Roboto Mono'; }
-  .sub-label { font-size: 0.8rem; color: var(--accent); margin-top: 20px; margin-bottom: 8px; display:block; font-weight:bold; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  /* 防重疊設定 */
+  label { 
+    display: block; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 5px; 
+    font-family: 'Roboto Mono'; 
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+  }
+  .sub-label { font-size: 0.85rem; color: var(--accent); margin-top: 20px; margin-bottom: 8px; display:block; font-weight:bold; border-bottom: 1px dashed #333; padding-bottom: 4px; }
 
+  /* 防擠壓設定 */
   input, select, textarea {
     width: 100%; background: #181818; border: 1px solid #444; color: var(--text-main);
-    padding: 0 12px; height: 45px; line-height: 45px; 
-    font-size: 16px; margin-bottom: 6px; border-radius: 4px; transition: 0.2s; font-family: 'Roboto Mono';
+    padding: 0 10px; height: 45px; line-height: 45px;
+    font-size: 15px; margin-bottom: 5px; border-radius: 4px; transition: 0.2s; font-family: 'Roboto Mono';
+    appearance: none; -webkit-appearance: none;
+    min-width: 0;
   }
-  input[type="date"], input[type="time"] { display: flex; align-items: center; padding-top:2px; }
   input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
-  textarea { height: auto; min-height: 80px; padding: 12px; line-height: 1.5; }
+  input[type="date"], input[type="time"] { display: flex; align-items: center; padding-top: 2px; }
+  textarea { height: auto; min-height: 80px; padding: 10px; line-height: 1.5; }
 
-  /* 排版 (v19 Fixed Layout) */
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
-  @media(max-width: 360px) { .row { grid-template-columns: 1fr; } }
-
-  .time-field { display: flex; gap: 8px; }
+  /* 左右並排 */
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .time-field { display: flex; gap: 5px; }
   
-  .item-row, .food-row { background: #252525; padding: 12px; margin-bottom: 12px; border-radius: 6px; border-left: 3px solid var(--border); position: relative; }
-  .item-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
-  .food-inputs { display: grid; grid-template-columns: 1fr 60px 70px; gap: 8px; margin-top: 8px; }
-  .item-controls input, .food-inputs input { text-align: center; padding: 0; height: 40px; font-size: 0.9rem; }
-  .custom-input { display: none; border-color: var(--accent); margin-top:8px; }
+  .item-row, .food-row { background: #252525; padding: 10px; margin-bottom: 10px; border-radius: 6px; border-left: 3px solid var(--border); position: relative; }
+  .item-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 8px; }
+  .food-inputs { display: grid; grid-template-columns: 1fr 60px 65px; gap: 5px; margin-top: 8px; }
+  .item-controls input, .food-inputs input { text-align: center; padding: 0; height: 38px; font-size: 0.9rem; }
+  .custom-input { display: none; border-color: var(--accent); margin-top:5px; }
   .custom-input.show { display: block; }
 
-  button { background: #333; color: #ddd; border: none; padding: 0; height: 45px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; letter-spacing: 1px; display:flex; align-items:center; justify-content:center; }
+  button { background: #333; color: #ddd; border: none; padding: 0; height: 45px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; }
   button:active { transform: scale(0.98); background: #444; }
   button.ghost { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
   button.ghost:active { background: var(--accent); color: #000; }
   button.add-btn { margin-top: 8px; background: rgba(255,255,255,0.05); border: 1px dashed #555; color: #888; }
-  button.sm { width: auto; padding: 0 12px; min-width: 50px; }
+  button.sm { width: auto; padding: 0 12px; min-width: 50px; font-size: 0.8rem; }
   .del-btn { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #333; color: #aaa; padding: 0; border-radius: 4px; font-size: 1rem; }
 
-  .float-action { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); padding: 15px 20px; border-top: 1px solid #444; display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; }
+  .float-action { 
+    position: fixed; bottom: 0; left: 0; width: 100%; 
+    background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); 
+    padding: 15px 20px; border-top: 1px solid #444; 
+    display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; 
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
+  }
   .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; height: 50px; }
   .float-action button.main { background: var(--accent); color: #000; font-weight: 700; height: 50px; }
 
-  /* === TIMER UI (v16 DASHBOARD) === */
-  #timerBtn { position: fixed; bottom: 100px; right: 20px; z-index: 99; width: 68px; height: 68px; background: var(--card); border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: 'Roboto Mono'; }
-  
-  #timerPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.98); backdrop-filter: blur(10px); z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.2s; }
+  /* === TIMER UI (v16 全螢幕儀表板) === */
+  #timerBtn { 
+    position: fixed; bottom: 100px; right: 20px; z-index: 99; width: 68px; height: 68px; 
+    background: var(--card); border: 2px solid var(--accent); color: var(--accent); 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 22px; font-weight: 700; border-radius: 50%; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: 'Roboto Mono'; 
+  }
+
+  #timerPanel { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(18, 18, 18, 0.98); backdrop-filter: blur(10px); 
+    z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; 
+    padding: 20px; opacity: 0; transition: opacity 0.2s; 
+  }
   #timerPanel.show { display: flex; opacity: 1; }
 
   .dashboard-card { width: 100%; max-width: 400px; background: #1e1e1e; border: 1px solid #444; border-radius: 16px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
@@ -108,7 +133,7 @@
   
   .close-timer-btn { position: absolute; top: 20px; right: 20px; background: transparent; color: #666; width: auto; font-size: 0.9rem; padding: 10px; border: 1px solid #444; }
 
-  #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 15px 30px; font-weight: bold; border-radius: 4px; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; border: 1px solid #555; font-size: 1rem; }
+  #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 15px 30px; font-weight: bold; border-radius: 4px; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; box-shadow: 0 0 20px rgba(0,255,195,0.4); }
   #toast.show { opacity: 1; }
   #copyArea { position: fixed; top: -9999px; left: -9999px; opacity: 0; }
 </style>
@@ -121,7 +146,6 @@
 
 <div id="timerPanel">
   <button class="close-timer-btn" onclick="toggleTimer()">✕ 縮小</button>
-  
   <div class="dashboard-card">
     <div class="timer-label">TOTAL TIME 總時長</div>
     <div class="total-time" id="tTotal">00:00.00</div>
@@ -129,14 +153,11 @@
     <div class="timer-label" style="margin-top:15px; color:var(--accent);">CURRENT LAP 分段</div>
     <div class="main-time" id="tVal">00:00</div>
   </div>
-  
   <div class="timer-controls">
     <button class="btn-start" id="tAction" onclick="timerAct()">開始</button>
     <button class="btn-secondary" onclick="timerLapReset()" id="tLapReset">計圈</button>
   </div>
-  
   <div style="height:20px;"></div>
-  
   <div class="laps-wrapper">
     <div class="laps-header"><span>圈數 (LAP)</span><span>時間 (TIME)</span></div>
     <ul class="laps-list" id="lapsList"></ul>
@@ -150,7 +171,7 @@
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
     <div class="row">
         <div><label>日期 (Date)</label><input type="date" id="dateVal"></div>
-        <div><label>總區間 (Auto Range)</label><input type="text" id="timeRange" placeholder="例 19:00 - 21:00"></div>
+        <div><label>總區間 (RANGE)</label><input type="text" id="timeRange" placeholder="例 19:00 - 21:00"></div>
     </div>
   </section>
 
@@ -286,10 +307,10 @@ function addFood(lid,tid,d={}) {
   div.append(c); document.getElementById(lid).append(div);
 }
 
-// Save/Load
 function getName(r){const s=r.querySelector('select'),c=r.querySelector('.custom-input');return s.value==='__custom__'?c.value:s.value;}
 function v(p,s){return p.querySelector(s)?.value||'';}
 
+// Save/Load
 function save(silent=true) {
   const d={
     dateVal: val('#dateVal'), timeRange: val('#timeRange'),
@@ -352,21 +373,36 @@ function timerLapReset() {
 function renderLaps() { document.getElementById('lapsList').innerHTML = laps.map((t,i) => `<li class="lap-row"><span>圈 ${laps.length-i}</span><span>${fmtT(t)}</span></li>`).join(''); }
 function toggleTimer() { document.getElementById('timerPanel').classList.toggle('show'); }
 
-// Reset (暴力清空)
+// === FIXED RESET LOGIC ===
 function forceReset() {
-  if(confirm('⚠️ 確定要清空並開始新的一天嗎？')) {
-    // 1. 清除資料庫
+  if(confirm('⚠️ 確定要清空並開始新的一天嗎？\n(目前的紀錄將被清除)')) {
+    // 1. 清除本地儲存
     localStorage.removeItem(KEY);
-    // 2. 手動清空畫面 (防止 Safari 快取回填)
-    document.querySelectorAll('input').forEach(i => i.value = '');
-    document.querySelectorAll('textarea').forEach(t => t.value = '');
-    document.querySelectorAll('.item-row, .food-row').forEach(r => r.remove());
-    // 3. 重新載入
-    location.reload();
+    
+    // 2. 手動清空所有輸入框 (防止瀏覽器快取)
+    document.querySelectorAll('input').forEach(el => el.value = '');
+    document.querySelectorAll('textarea').forEach(el => el.value = '');
+    
+    // 3. 移除動態列表
+    document.getElementById('exerciseList').innerHTML = '';
+    document.getElementById('cardioList').innerHTML = '';
+    document.querySelectorAll('[id^="list"]').forEach(el => el.innerHTML = '');
+
+    // 4. 重置文字顯示
+    document.getElementById('wtDur').innerText = '持續時間: 0 分鐘';
+    document.getElementById('wTotal').innerText = '總計: 0 ML';
+
+    // 5. 重置碼表變數
+    if(tInt) clearInterval(tInt);
+    tInt=null; totalStartTime=0; lapStartTime=0; tTotalElapsed=0; laps=[];
+    updT(0,0); 
+    document.getElementById('lapsList').innerHTML='';
+
+    // 6. 重新載入頁面 (確保乾淨)
+    setTimeout(() => location.reload(), 100);
   }
 }
 
-// Copy
 async function genText() {
   save(true); const d=JSON.parse(localStorage.getItem(KEY)); 
   const dateStr = d.dateVal ? d.dateVal.replace(/-/g, '/') : new Date().toLocaleDateString();
