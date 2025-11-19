@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZiP TACTICAL LOG /// v16</title>
+<title>ZiP TACTICAL LOG /// v17</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V16 (Tactical) === */
+  /* === ESPORTS THEME V17 (Layout Fixed) === */
   :root {
     --bg: #121212;
     --card: #1e1e1e;
@@ -15,22 +15,29 @@
     --text-main: #e0e0e0;
     --text-sub: #888888;
     --accent: #6b8e23; /* Military Green */
-    --warn: #a63737;   /* Brick Red */
+    --warn: #a63737;    /* Brick Red */
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+  
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Roboto Mono', monospace;
-    margin: 0; padding: 1.2rem; padding-bottom: 180px;
+    margin: 0; padding: 1.2rem; 
+    /* 修正點 1: 底部留白加大，防止按鈕擋住內容 */
+    padding-bottom: 220px; 
     background-color: var(--bg); color: var(--text-main); 
     display: flex; justify-content: center;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   }
   .shell { width: 100%; max-width: 600px; }
 
+  /* 修正點 2: 標題排版優化，避免換行過醜 */
   h1 { 
-    font-size: 1.6rem; text-align: center; margin: 0 0 1.5rem; letter-spacing: 3px; color: var(--text-sub); font-weight: 700;
-    border-bottom: 2px solid var(--accent); display: inline-block; width: 100%; padding-bottom: 10px;
+    font-size: 1.5rem; text-align: center; margin: 10px 0 1.5rem; 
+    letter-spacing: 2px; color: var(--text-sub); font-weight: 700;
+    border-bottom: 2px solid var(--accent); display: block; width: 100%; padding-bottom: 10px;
+    line-height: 1.3;
   }
+  
   section {
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
     margin-bottom: 1.2rem; padding: 1.4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
@@ -48,7 +55,10 @@
   }
   input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
   
+  /* 修正點 3: 日期欄位在小螢幕時自動換行，防止擠壓 */
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+  @media (max-width: 360px) { .row { grid-template-columns: 1fr; } }
+
   .time-field { display: flex; gap: 8px; }
   
   .item-row, .food-row { background: #252525; padding: 12px; margin-bottom: 12px; border-radius: 6px; border-left: 3px solid var(--border); position: relative; }
@@ -66,12 +76,27 @@
   button.sm { width: auto; padding: 8px 12px; font-size: 0.8rem; min-width: 50px; }
   .del-btn { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #333; color: #aaa; padding: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 
-  .float-action { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); padding: 15px 20px; border-top: 1px solid #444; display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; }
+  /* 底部工具列 */
+  .float-action { 
+    position: fixed; bottom: 0; left: 0; width: 100%; 
+    background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); 
+    padding: 15px 20px; border-top: 1px solid #444; 
+    display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; 
+    /* 增加陰影讓它跟內容區分開 */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
+  }
   .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; }
   .float-action button.main { background: var(--accent); color: #000; font-weight: 700; }
 
-  /* === TIMER UI === */
-  #timerBtn { position: fixed; bottom: 100px; right: 20px; z-index: 99; width: 68px; height: 68px; background: var(--card); border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: 'Roboto Mono'; }
+  /* === TIMER UI (保留原樣，微調位置) === */
+  #timerBtn { 
+    position: fixed; bottom: 110px; /* 稍微往上移，避免太貼工具列 */ 
+    right: 20px; z-index: 99; width: 68px; height: 68px; 
+    background: var(--card); border: 2px solid var(--accent); color: var(--accent); 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 22px; font-weight: 700; border-radius: 50%; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: 'Roboto Mono'; 
+  }
   #timerPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.98); backdrop-filter: blur(10px); z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.2s; }
   #timerPanel.show { display: flex; opacity: 1; }
   .dashboard-card { width: 100%; max-width: 400px; background: #1e1e1e; border: 1px solid #444; border-radius: 16px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
@@ -123,7 +148,7 @@
 </div>
 
 <div class="shell">
-  <h1>ZIP LOG</h1>
+  <h1>ZiP TACTICAL LOG /// v17</h1>
 
   <section>
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
@@ -219,7 +244,7 @@
 <template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）185g</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
 
 <script>
-const KEY = 'ZIP_LOG_V16_DATA';
+const KEY = 'ZIP_LOG_V17_DATA';
 let tInt=null, totalStartTime=0, lapStartTime=0, tTotalElapsed=0, laps=[];
 
 // === 單位判斷 ===
@@ -273,7 +298,7 @@ function v(p,s) { return p.querySelector(s)?.value||''; }
 // === IO ===
 function save(silent=true) {
   const d = {
-    dateVal: val('#dateVal'), timeRange: val('#timeRange'), // 新增日期與時段
+    dateVal: val('#dateVal'), timeRange: val('#timeRange'), 
     wtStart:val('#wtStart'), wtEnd:val('#wtEnd'), caStart:val('#caStart'), caEnd:val('#caEnd'), stretch:val('#stretch'), wWork:val('#wWork'), wDay:val('#wDay'), note:val('#note'),
     exs: getAll('#exerciseList .item-row').map(r=>({ n:getName(r), s:v(r,'.s'), r:v(r,'.r'), w:v(r,'.w'), rt:v(r,'.rt') })),
     cardios: getAll('#cardioList .item-row').map(r=>({ n:getName(r), dur:v(r,'.dur'), lv:v(r,'.lv'), bpm:v(r,'.bpm') })),
@@ -287,15 +312,9 @@ function getF(id) { return getAll(`#${id} .food-row`).map(r=>({ n:getName(r), a:
 
 function load() {
   const raw = localStorage.getItem(KEY);
-  if(!raw){ 
-    // New User / Empty: Set Today
-    document.getElementById('dateVal').valueAsDate = new Date();
-    addExercise(); 
-    return; 
-  }
+  if(!raw){ document.getElementById('dateVal').valueAsDate = new Date(); addExercise(); return; }
   const d = JSON.parse(raw);
   
-  // 載入日期與時段 (如果有的話)，若沒紀錄則預設今天
   if(d.dateVal) set('#dateVal', d.dateVal); else document.getElementById('dateVal').valueAsDate = new Date();
   set('#timeRange', d.timeRange);
 
@@ -320,20 +339,8 @@ function load() {
 
 // === 智慧自動抓頭尾 (Auto Range) ===
 function autoTimeRange() {
-    // 收集所有時間點
-    const times = [
-        val('#wtStart'), val('#wtEnd'), 
-        val('#caStart'), val('#caEnd')
-    ].filter(t => t !== ""); // 過濾掉沒填的
-
-    if (times.length >= 2) {
-        // 排序時間字串
-        times.sort();
-        const start = times[0];
-        const end = times[times.length - 1];
-        // 自動填入
-        set('#timeRange', `${start} - ${end}`);
-    }
+    const times = [ val('#wtStart'), val('#wtEnd'), val('#caStart'), val('#caEnd') ].filter(t => t !== ""); 
+    if (times.length >= 2) { times.sort(); set('#timeRange', `${times[0]} - ${times[times.length - 1]}`); }
 }
 
 // === Timer ===
@@ -373,15 +380,10 @@ function forceReset() {
 }
 async function genText() {
   save(true); const d=JSON.parse(localStorage.getItem(KEY)); 
-  // 使用者輸入的日期，若無則顯示今天
   const dateStr = d.dateVal ? d.dateVal.replace(/-/g, '/') : new Date().toLocaleDateString();
-  
   let t=`📅 ${dateStr} 訓練日誌\n──────────────────\n`;
-  
-  // 判斷時間顯示：優先使用 TimeRange，若無則用重訓時間
   const timeShow = d.timeRange ? d.timeRange : (d.wtStart ? `${d.wtStart} - ${d.wtEnd}` : '');
   if(timeShow) t += `⏰ 時間: ${timeShow}\n`;
-  
   if(d.exs.some(x=>x.n)) { t+=`\n🏋️ 重訓項目\n`; d.exs.forEach(x=>{if(x.n)t+=`• ${x.n}｜${x.s}組×${x.r}次｜${x.w}kg${x.rt?` (休${x.rt}s)`:''}\n`}); }
   if(d.cardios.some(x=>x.n)||val('#caStart')) { t+=`\n🏃 有氧與伸展\n`; d.cardios.forEach(x=>{if(x.n)t+=`• ${x.n}｜${x.dur}分 (Lv.${x.lv}/${x.bpm}bpm)\n`}); if(val('#stretch'))t+=`• 伸展: ${val('#stretch')} 分鐘\n`; }
   t+=`\n🥗 飲食紀錄\n`;
@@ -396,8 +398,8 @@ async function genText() {
 function manualSave() { save(false); }
 setInterval(()=>save(true), 900000);
 window.addEventListener('visibilitychange', ()=>{if(document.hidden)save(true)});
-function setNow(id) { const n=new Date(); document.getElementById(id).value=`${pad(n.getHours())}:${pad(n.getMinutes())}`; calcTime(); autoTimeRange(); } // Added autoTimeRange trigger
-function calcTime() { const d=(s,e)=>{if(!s||!e)return 0; const [h1,m1]=s.split(':').map(Number); const [h2,m2]=e.split(':').map(Number); return Math.max(0,(h2*60+m2)-(h1*60+m1));}; document.getElementById('wtDur').innerText=`持續時間: ${d(val('#wtStart'),val('#wtEnd'))} 分鐘`; }
+function setNow(id) { const n=new Date(); document.getElementById(id).value=`${pad(n.getHours())}:${pad(n.getMinutes())}`; calcTime(); autoTimeRange(); } 
+function calcTime() { const d=(s,e)=>{if(!s||!e)return 0; const [h1,m1]=s.split(':').map(Number); const [h2,m2]=e.split(':').map(Number); return Math.max(0,(h2*60+m2)-(h1*60+m1));}; document.getElementById('wtDur').innerText=`持續: ${d(val('#wtStart'),val('#wtEnd'))} 分鐘`; }
 function calcWater() { document.getElementById('wTotal').innerText=`總計: ${(Number(val('#wWork'))||0)+(Number(val('#wDay'))||0)} ML`; }
 load();
 </script>
