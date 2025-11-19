@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZiP TACTICAL LOG /// v17</title>
+<title>ZiP TACTICAL LOG /// v19</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V17 (Layout Fixed) === */
+  /* === ESPORTS THEME V19 (Pixel Perfect Fix) === */
   :root {
     --bg: #121212;
     --card: #1e1e1e;
@@ -22,7 +22,6 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Roboto Mono', monospace;
     margin: 0; padding: 1.2rem; 
-    /* 修正點 1: 底部留白加大，防止按鈕擋住內容 */
     padding-bottom: 220px; 
     background-color: var(--bg); color: var(--text-main); 
     display: flex; justify-content: center;
@@ -30,7 +29,6 @@
   }
   .shell { width: 100%; max-width: 600px; }
 
-  /* 修正點 2: 標題排版優化，避免換行過醜 */
   h1 { 
     font-size: 1.5rem; text-align: center; margin: 10px 0 1.5rem; 
     letter-spacing: 2px; color: var(--text-sub); font-weight: 700;
@@ -42,39 +40,56 @@
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
     margin-bottom: 1.2rem; padding: 1.4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
   }
+  
+  /* 修正點 1: 增加標題下方的距離 (原本是15px -> 改為 25px)，解決重疊 */
   h2 { 
-    font-size: 0.95rem; margin: 0 0 15px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.95rem; margin: 0 0 25px 0; display: flex; justify-content: space-between; align-items: center;
     color: var(--text-main); font-weight: 600; border-left: 4px solid var(--accent); padding-left: 12px; letter-spacing: 1px;
   }
-  h2 small { font-size: 0.75rem; color: var(--text-sub); font-weight: 400; }
+  h2 small { font-size: 0.75rem; color: var(--text-sub); font-weight: 400; text-transform: uppercase; }
+
+  label { display: block; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 6px; font-family: 'Roboto Mono'; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  
   .sub-label { font-size: 0.8rem; color: var(--accent); margin-top: 20px; margin-bottom: 8px; display:block; font-weight:bold; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
 
+  /* 修正點 2: 強制統一 Input 高度與樣式，解決日期框錯位 */
   input, select, textarea {
     width: 100%; background: #181818; border: 1px solid #444; color: var(--text-main);
-    padding: 12px; font-size: 16px; margin-bottom: 6px; border-radius: 4px; transition: 0.2s; font-family: 'Roboto Mono';
+    padding: 0 12px; /* 上下 Padding 改用 height 控制 */
+    height: 45px;    /* 強制高度，確保 Date 和 Text 一樣高 */
+    line-height: 45px;
+    font-size: 16px; margin-bottom: 6px; border-radius: 4px; transition: 0.2s; 
+    font-family: 'Roboto Mono';
+    appearance: none; -webkit-appearance: none; /* 移除 iOS 預設樣式 */
   }
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
-  
-  /* 修正點 3: 日期欄位在小螢幕時自動換行，防止擠壓 */
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
-  @media (max-width: 360px) { .row { grid-template-columns: 1fr; } }
+  /* 日期選單特殊處理，確保文字垂直置中 */
+  input[type="date"], input[type="time"] { 
+    display: flex; align-items: center; 
+    padding-top: 2px; /* 微調文字位置 */
+  }
 
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
+  textarea { height: auto; min-height: 80px; padding: 12px; line-height: 1.5; }
+
+  /* 排版 Grid */
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+  
   .time-field { display: flex; gap: 8px; }
   
   .item-row, .food-row { background: #252525; padding: 12px; margin-bottom: 12px; border-radius: 6px; border-left: 3px solid var(--border); position: relative; }
   .item-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
   .food-inputs { display: grid; grid-template-columns: 1fr 60px 70px; gap: 8px; margin-top: 8px; }
-  .item-controls input, .food-inputs input { text-align: center; padding: 8px; font-size: 0.9rem; }
+  .item-controls input, .food-inputs input { text-align: center; padding: 0; height: 40px; line-height: 40px; font-size: 0.9rem; }
   .custom-input { display: none; border-color: var(--accent); margin-top:8px; }
   .custom-input.show { display: block; }
 
-  button { background: #333; color: #ddd; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; letter-spacing: 1px; }
+  button { background: #333; color: #ddd; border: none; padding: 0; height: 45px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; }
   button:active { transform: scale(0.98); background: #444; }
   button.ghost { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
   button.ghost:active { background: var(--accent); color: #000; }
   button.add-btn { margin-top: 8px; background: rgba(255,255,255,0.05); border: 1px dashed #555; color: #888; }
-  button.sm { width: auto; padding: 8px 12px; font-size: 0.8rem; min-width: 50px; }
-  .del-btn { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #333; color: #aaa; padding: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+  button.sm { width: auto; padding: 0 15px; height: 45px; font-size: 0.8rem; min-width: 60px; }
+  .del-btn { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #333; color: #aaa; padding: 0; border-radius: 4px; font-size: 1rem; }
 
   /* 底部工具列 */
   .float-action { 
@@ -82,43 +97,45 @@
     background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); 
     padding: 15px 20px; border-top: 1px solid #444; 
     display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; 
-    /* 增加陰影讓它跟內容區分開 */
     box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
   }
-  .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; }
-  .float-action button.main { background: var(--accent); color: #000; font-weight: 700; }
+  .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; height: 50px; }
+  .float-action button.main { background: var(--accent); color: #000; font-weight: 700; height: 50px; }
+  .float-action button.ghost { height: 50px; }
 
-  /* === TIMER UI (保留原樣，微調位置) === */
+  /* === TIMER UI (懸浮方塊還原) === */
   #timerBtn { 
-    position: fixed; bottom: 110px; /* 稍微往上移，避免太貼工具列 */ 
-    right: 20px; z-index: 99; width: 68px; height: 68px; 
-    background: var(--card); border: 2px solid var(--accent); color: var(--accent); 
+    position: fixed; bottom: 110px; right: 20px; z-index: 99; width: 65px; height: 65px; 
+    background: #000; border: 2px solid var(--accent); color: var(--accent); 
     display: flex; align-items: center; justify-content: center; 
-    font-size: 22px; font-weight: 700; border-radius: 50%; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: 'Roboto Mono'; 
+    font-size: 24px; font-weight: bold; font-family: 'Roboto Mono'; border-radius: 50%; 
+    box-shadow: 0 0 15px rgba(0,255,195,0.3); clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%);
   }
-  #timerPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.98); backdrop-filter: blur(10px); z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.2s; }
-  #timerPanel.show { display: flex; opacity: 1; }
-  .dashboard-card { width: 100%; max-width: 400px; background: #1e1e1e; border: 1px solid #444; border-radius: 16px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
-  .timer-label { font-size: 0.9rem; color: var(--text-sub); letter-spacing: 2px; margin-bottom: 5px; }
-  .total-time { font-size: 1.5rem; color: #aaa; font-family: 'Roboto Mono'; margin-bottom: 15px; }
-  .main-time { font-size: 5rem; color: #fff; font-family: 'Roboto Mono'; font-weight: 300; line-height: 1; margin: 10px 0 30px 0; letter-spacing: -2px; }
-  .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 400px; }
-  .timer-controls button { padding: 18px; font-size: 1.1rem; border-radius: 12px; }
-  .btn-start { background: var(--accent); color: #0d2b0d; }
-  .btn-pause { background: var(--warn); color: #3d0d0d; }
-  .btn-secondary { background: #333; color: #ccc; }
-  .laps-wrapper { width: 100%; max-width: 400px; height: 30vh; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
-  .laps-header { background: #222; padding: 10px 20px; font-size: 0.85rem; color: #666; display: flex; justify-content: space-between; border-bottom: 1px solid #333; }
-  .laps-list { overflow-y: auto; flex: 1; padding: 0; margin: 0; list-style: none; }
-  .lap-row { display: flex; justify-content: space-between; padding: 12px 20px; font-family: 'Roboto Mono'; color: #aaa; border-bottom: 1px solid #222; font-size: 1rem; }
-  .lap-row:nth-child(even) { background: #1e1e1e; }
-  .lap-row:first-child { color: var(--text-main); font-weight: bold; background: rgba(107, 142, 35, 0.1); }
-  .close-timer-btn { position: absolute; top: 20px; right: 20px; background: transparent; color: #666; width: auto; font-size: 0.9rem; padding: 10px; }
+  
+  #timerPanel { 
+    position: fixed; bottom: 110px; right: 20px; width: 280px; 
+    background: rgba(10, 10, 10, 0.98); border: 1px solid var(--accent); 
+    padding: 15px; z-index: 100; display: none; 
+    clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  }
+  #timerPanel.show { display: block; }
+  
+  .timer-header { display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.75rem; color:var(--accent); letter-spacing:1px; }
+  #tVal { font-size: 2.8rem; font-family: 'Roboto Mono'; text-align: center; color: #fff; margin: 10px 0; text-shadow: 0 0 15px var(--accent); }
+  .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .timer-controls button { height: 45px; } /* 計時器按鈕高度 */
+  
+  .laps-container { 
+    max-height: 150px; overflow-y: auto; margin-top: 15px; 
+    border-top: 1px dashed #333; padding-top: 5px; 
+  }
+  .lap-row { display: flex; justify-content: space-between; color: #888; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid #222; font-family: 'Roboto Mono'; }
 
-  #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(30,30,30,0.95); color: #fff; padding: 15px 25px; border-radius: 8px; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; border: 1px solid #555; font-size: 1rem; }
+  /* 提示框 */
+  #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 15px 30px; font-weight: bold; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px); box-shadow: 0 0 20px rgba(0,255,195,0.4); }
   #toast.show { opacity: 1; }
-  #copyArea { position: fixed; top: -9999px; left: -9999px; opacity: 0; }
+  #copyArea { position: fixed; top: -9999px; opacity: 0; }
 </style>
 </head>
 <body>
@@ -128,27 +145,21 @@
 <div id="timerBtn" onclick="toggleTimer()">00</div>
 
 <div id="timerPanel">
-  <button class="close-timer-btn" onclick="toggleTimer()">✕ 縮小</button>
-  <div class="dashboard-card">
-    <div class="timer-label">TOTAL TIME 總時長</div>
-    <div class="total-time" id="tTotal">00:00.00</div>
-    <div style="height:1px; background:#333; margin:10px 20px;"></div>
-    <div class="timer-label" style="margin-top:15px; color:var(--accent);">CURRENT LAP 分段</div>
-    <div class="main-time" id="tVal">00:00</div>
+  <div class="timer-header">
+    <span>碼表 (STOPWATCH)</span> <span onclick="toggleTimer()" style="cursor:pointer">[✕]</span>
   </div>
+  <div id="tVal">00:00.00</div>
+  
   <div class="timer-controls">
-    <button class="btn-start" id="tAction" onclick="timerAct()">開始</button>
-    <button class="btn-secondary" onclick="timerLapReset()" id="tLapReset">計圈</button>
+    <button class="warn" id="tAction" onclick="timerAct()">開始</button>
+    <button class="ghost" onclick="timerLapReset()" id="tLapReset">計圈</button>
   </div>
-  <div style="height:20px;"></div>
-  <div class="laps-wrapper">
-    <div class="laps-header"><span>圈數 (LAP)</span><span>時間 (TIME)</span></div>
-    <ul class="laps-list" id="lapsList"></ul>
-  </div>
+
+  <div class="laps-container" id="lapsList"></div>
 </div>
 
 <div class="shell">
-  <h1>ZiP TACTICAL LOG /// v17</h1>
+  <h1>ZiP TACTICAL LOG /// v19</h1>
 
   <section>
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
@@ -244,7 +255,7 @@
 <template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）185g</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
 
 <script>
-const KEY = 'ZIP_LOG_V17_DATA';
+const KEY = 'ZIP_LOG_V19_DATA';
 let tInt=null, totalStartTime=0, lapStartTime=0, tTotalElapsed=0, laps=[];
 
 // === 單位判斷 ===
@@ -352,21 +363,20 @@ function fmtT(ms, showMs=true) {
 }
 function updT(lapMs, totalMs) {
   document.getElementById('tVal').innerText = fmtT(lapMs, false); 
-  document.getElementById('tTotal').innerText = fmtT(totalMs); 
   document.getElementById('timerBtn').innerText = String(Math.floor((lapMs%60000)/1000)).padStart(2,'0');
 }
 function startT() {
-  const btn = document.getElementById('tAction'); btn.innerText = "暫停"; btn.className = "btn-pause"; document.getElementById('tLapReset').innerText = "計圈"; 
+  const btn = document.getElementById('tAction'); btn.innerText = "暫停"; btn.className = "warn"; document.getElementById('tLapReset').innerText = "計圈"; 
   tInt = setInterval(() => { const now = Date.now(); updT(now - lapStartTime, tTotalElapsed + (now - totalStartTime)); }, 50);
 }
 function timerAct() {
-  if(tInt) { clearInterval(tInt); tInt = null; tTotalElapsed += Date.now() - totalStartTime; document.getElementById('tAction').innerText = "繼續"; document.getElementById('tAction').className = "btn-start"; document.getElementById('tLapReset').innerText = "重置"; save(true); }
+  if(tInt) { clearInterval(tInt); tInt = null; tTotalElapsed += Date.now() - totalStartTime; document.getElementById('tAction').innerText = "繼續"; document.getElementById('tAction').className = "ghost"; document.getElementById('tLapReset').innerText = "重置"; save(true); }
   else { if(totalStartTime === 0 || document.getElementById('tAction').innerText === "開始") { totalStartTime = Date.now(); lapStartTime = Date.now(); tTotalElapsed = 0; laps = []; renderLaps(); } else { totalStartTime = Date.now(); lapStartTime = Date.now() - (parseMs(document.getElementById('tVal').innerText)); } startT(); }
 }
 function parseMs(str) { let parts = str.split(':'); return (parseInt(parts[0])*60000) + (parseInt(parts[1])*1000); }
 function timerLapReset() {
   if(tInt) { laps.unshift(Date.now() - lapStartTime); renderLaps(); lapStartTime = Date.now(); } 
-  else { tTotalElapsed = 0; totalStartTime = 0; lapStartTime = 0; laps = []; updT(0, 0); document.getElementById('lapsList').innerHTML=''; document.getElementById('tAction').innerText="開始"; document.getElementById('tAction').className="btn-start"; document.getElementById('tLapReset').innerText="計圈"; save(true); }
+  else { tTotalElapsed = 0; totalStartTime = 0; lapStartTime = 0; laps = []; updT(0, 0); document.getElementById('lapsList').innerHTML=''; document.getElementById('tAction').innerText="開始"; document.getElementById('tAction').className="warn"; document.getElementById('tLapReset').innerText="計圈"; save(true); }
 }
 function renderLaps() { document.getElementById('lapsList').innerHTML = laps.map((t,i) => `<li class="lap-row"><span>圈 ${laps.length-i}</span><span>${fmtT(t)}</span></li>`).join(''); }
 function toggleTimer() { document.getElementById('timerPanel').classList.toggle('show'); }
