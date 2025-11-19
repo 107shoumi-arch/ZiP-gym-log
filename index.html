@@ -3,87 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZIP LOG /// SYSTEM V13</title>
+<title>ZIP LOG /// SYSTEM V16</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V13 === */
-  :root { --bg: #050505; --border: #333; --accent: #00ffc3; --sec: #00a8ff; --warn: #ff0055; --text: #eee; --muted: #666; }
+  /* === ESPORTS THEME V16 (Tactical) === */
+  :root {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --border: #333333;
+    --text-main: #e0e0e0;
+    --text-sub: #888888;
+    --accent: #6b8e23; /* Military Green */
+    --warn: #a63737;   /* Brick Red */
+  }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
   body {
-    font-family: 'SF Pro Text', 'Roboto Mono', sans-serif; margin: 0; padding: 1.2rem; padding-bottom: 180px;
-    background-color: var(--bg); color: var(--text); display: flex; justify-content: center;
-    background-image: linear-gradient(rgba(0, 255, 195, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 195, 0.03) 1px, transparent 1px); background-size: 20px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto Mono', monospace;
+    margin: 0; padding: 1.2rem; padding-bottom: 180px;
+    background-color: var(--bg); color: var(--text-main); 
+    display: flex; justify-content: center;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   }
   .shell { width: 100%; max-width: 600px; }
 
-  h1 { font-size: 1.8rem; text-align: center; margin: 0 0 1.5rem; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,255,195,0.3); border-bottom: 2px solid var(--accent); padding-bottom: 5px; display: inline-block; width: 100%; }
-  section { background: rgba(17, 17, 17, 0.8); border: 1px solid var(--border); margin-bottom: 1.2rem; padding: 1.2rem; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%); }
+  h1 { 
+    font-size: 1.6rem; text-align: center; margin: 0 0 1.5rem; letter-spacing: 3px; color: var(--text-sub); font-weight: 700;
+    border-bottom: 2px solid var(--accent); display: inline-block; width: 100%; padding-bottom: 10px;
+  }
+  section {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    margin-bottom: 1.2rem; padding: 1.4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  }
+  h2 { 
+    font-size: 0.95rem; margin: 0 0 15px 0; display: flex; justify-content: space-between; align-items: center;
+    color: var(--text-main); font-weight: 600; border-left: 4px solid var(--accent); padding-left: 12px; letter-spacing: 1px;
+  }
+  h2 small { font-size: 0.75rem; color: var(--text-sub); font-weight: 400; }
+  .sub-label { font-size: 0.8rem; color: var(--accent); margin-top: 20px; margin-bottom: 8px; display:block; font-weight:bold; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+
+  input, select, textarea {
+    width: 100%; background: #181818; border: 1px solid #444; color: var(--text-main);
+    padding: 12px; font-size: 16px; margin-bottom: 6px; border-radius: 4px; transition: 0.2s; font-family: 'Roboto Mono';
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
   
-  h2 { font-size: 1rem; margin: 0; display: flex; justify-content: space-between; color: var(--accent); border-left: 4px solid var(--accent); padding-left: 10px; }
-  h2 small { font-size: .6rem; color: var(--muted); }
-  .sub-label { font-size: 0.85rem; color: var(--sec); margin-top: 15px; margin-bottom: 8px; display:block; font-weight:bold; border-bottom: 1px dashed #333; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+  .time-field { display: flex; gap: 8px; }
   
-  input, select, textarea { width: 100%; background: #000; border: 1px solid var(--border); color: var(--accent); padding: 10px; font-size: 16px; margin-bottom: 5px; font-family: 'Roboto Mono', monospace; transition: 0.2s; }
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(0,255,195,0.2); }
-  
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
-  .time-field { display: flex; gap: 5px; }
-  .item-row, .food-row { background: #0a0a0a; padding: 10px; margin-bottom: 10px; border: 1px solid #222; border-left: 3px solid var(--sec); position: relative; }
-  .food-row { border-left: none; border-right: 3px solid var(--warn); }
-  .item-controls, .food-inputs { display: grid; gap: 5px; margin-top: 5px; }
-  .item-controls { grid-template-columns: repeat(4, 1fr); }
-  .food-inputs { grid-template-columns: 1fr 60px 70px; }
-  .custom-input { display: none; border-color: var(--sec); color: var(--sec); margin-top:5px; }
+  .item-row, .food-row { background: #252525; padding: 12px; margin-bottom: 12px; border-radius: 6px; border-left: 3px solid var(--border); position: relative; }
+  .item-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px; }
+  .food-inputs { display: grid; grid-template-columns: 1fr 60px 70px; gap: 8px; margin-top: 8px; }
+  .item-controls input, .food-inputs input { text-align: center; padding: 8px; font-size: 0.9rem; }
+  .custom-input { display: none; border-color: var(--accent); margin-top:8px; }
   .custom-input.show { display: block; }
-  
-  button { background: var(--border); color: var(--text); border: none; padding: 10px; font-weight: 700; cursor: pointer; width: 100%; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
-  button:active { transform: translateY(2px); }
-  button.ghost { background: rgba(0,255,195,0.1); color: var(--accent); border: 1px solid rgba(0,255,195,0.3); }
-  button.warn { background: rgba(255,0,85,0.15); color: var(--warn); border: 1px solid var(--warn); }
-  button.danger { background: #220000; color: #ff4444; border: 1px solid #ff0000; margin-top: 30px; padding: 15px; }
-  button.sm { width: auto; padding: 4px 10px; font-size: 0.75rem; min-width: 40px; }
-  button.add-btn { margin-top: 5px; background: transparent; border: 1px dashed #444; color: #666; clip-path: none; }
-  .del-btn { position: absolute; top: 5px; right: 5px; width: 25px; height: 25px; background: transparent; color: #444; padding: 0; clip-path: none; }
 
-  .float-action { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); padding: 15px; border-top: 1px solid var(--accent); display: grid; grid-template-columns: 60px 1fr 1fr; gap: 10px; z-index: 90; }
-  .float-action button.icon-only { font-size: 1.5rem; background: #220000; color: var(--warn); border: 1px solid var(--warn); }
-  .float-action button.main { background: var(--accent); color: #000; }
+  button { background: #333; color: #ddd; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9rem; width: 100%; letter-spacing: 1px; }
+  button:active { transform: scale(0.98); background: #444; }
+  button.ghost { background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+  button.ghost:active { background: var(--accent); color: #000; }
+  button.add-btn { margin-top: 8px; background: rgba(255,255,255,0.05); border: 1px dashed #555; color: #888; }
+  button.sm { width: auto; padding: 8px 12px; font-size: 0.8rem; min-width: 50px; }
+  .del-btn { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #333; color: #aaa; padding: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 
-  /* === 碼表優化 === */
-  #timerBtn { 
-    position: fixed; bottom: 100px; right: 20px; z-index: 99; width: 70px; height: 70px; 
-    background: #000; border: 2px solid var(--accent); color: var(--accent); 
-    display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold;
-    clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%); 
-    box-shadow: 0 0 20px rgba(0,255,195,0.3); transition: transform 0.2s;
-  }
-  #timerBtn:active { transform: scale(0.9); }
+  .float-action { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); padding: 15px 20px; border-top: 1px solid #444; display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; }
+  .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; }
+  .float-action button.main { background: var(--accent); color: #000; font-weight: 700; }
 
-  #timerPanel { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.95); backdrop-filter: blur(10px);
-    z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center;
-    padding: 20px; opacity: 0; transition: opacity 0.2s;
-  }
+  /* === TIMER UI === */
+  #timerBtn { position: fixed; bottom: 100px; right: 20px; z-index: 99; width: 68px; height: 68px; background: var(--card); border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.5); font-family: 'Roboto Mono'; }
+  #timerPanel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.98); backdrop-filter: blur(10px); z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.2s; }
   #timerPanel.show { display: flex; opacity: 1; }
-  
-  .timer-header { width: 100%; display: flex; justify-content: space-between; position: absolute; top: 50px; padding: 0 20px; }
-  .close-timer { font-size: 1.5rem; color: var(--muted); cursor: pointer; }
-  
-  /* 雙重時間顯示 */
-  .total-time-display { font-size: 1.2rem; color: var(--muted); font-family: 'Roboto Mono'; margin-bottom: 5px; }
-  #tVal { font-size: 22vw; font-family: 'Roboto Mono', monospace; font-weight: bold; color: #fff; text-shadow: 0 0 30px var(--accent); line-height: 1; margin-bottom: 30px; }
-  
+  .dashboard-card { width: 100%; max-width: 400px; background: #1e1e1e; border: 1px solid #444; border-radius: 16px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+  .timer-label { font-size: 0.9rem; color: var(--text-sub); letter-spacing: 2px; margin-bottom: 5px; }
+  .total-time { font-size: 1.5rem; color: #aaa; font-family: 'Roboto Mono'; margin-bottom: 15px; }
+  .main-time { font-size: 5rem; color: #fff; font-family: 'Roboto Mono'; font-weight: 300; line-height: 1; margin: 10px 0 30px 0; letter-spacing: -2px; }
   .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 400px; }
-  .timer-controls button { padding: 25px; font-size: 1.2rem; clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px); }
+  .timer-controls button { padding: 18px; font-size: 1.1rem; border-radius: 12px; }
+  .btn-start { background: var(--accent); color: #0d2b0d; }
+  .btn-pause { background: var(--warn); color: #3d0d0d; }
+  .btn-secondary { background: #333; color: #ccc; }
+  .laps-wrapper { width: 100%; max-width: 400px; height: 30vh; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .laps-header { background: #222; padding: 10px 20px; font-size: 0.85rem; color: #666; display: flex; justify-content: space-between; border-bottom: 1px solid #333; }
+  .laps-list { overflow-y: auto; flex: 1; padding: 0; margin: 0; list-style: none; }
+  .lap-row { display: flex; justify-content: space-between; padding: 12px 20px; font-family: 'Roboto Mono'; color: #aaa; border-bottom: 1px solid #222; font-size: 1rem; }
+  .lap-row:nth-child(even) { background: #1e1e1e; }
+  .lap-row:first-child { color: var(--text-main); font-weight: bold; background: rgba(107, 142, 35, 0.1); }
+  .close-timer-btn { position: absolute; top: 20px; right: 20px; background: transparent; color: #666; width: auto; font-size: 0.9rem; padding: 10px; }
 
-  .laps-container { max-height: 28vh; overflow-y: auto; width: 100%; max-width: 400px; margin-top: 20px; border-top: 1px dashed #333; }
-  .lap-row { display: flex; justify-content: space-between; color: #aaa; font-size: 1.1rem; padding: 10px 0; border-bottom: 1px solid #222; font-family: 'Roboto Mono'; }
-  .lap-row span:first-child { color: var(--sec); }
-  .lap-row:first-child { color: #fff; font-weight: bold; } /* 最新一圈亮顯 */
-
-  #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 15px 30px; font-weight: bold; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px); font-size: 1.2rem; box-shadow: 0 0 50px rgba(0,255,195,0.5); }
+  #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(30,30,30,0.95); color: #fff; padding: 15px 25px; border-radius: 8px; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; border: 1px solid #555; font-size: 1rem; }
   #toast.show { opacity: 1; }
   #copyArea { position: fixed; top: -9999px; left: -9999px; opacity: 0; }
 </style>
@@ -95,44 +103,53 @@
 <div id="timerBtn" onclick="toggleTimer()">00</div>
 
 <div id="timerPanel">
-  <div class="timer-header">
-    <span>⏱ 分段碼表 (LAP TIMER)</span>
-    <span class="close-timer" onclick="toggleTimer()">[ 縮小 ]</span>
+  <button class="close-timer-btn" onclick="toggleTimer()">✕ 縮小</button>
+  <div class="dashboard-card">
+    <div class="timer-label">TOTAL TIME 總時長</div>
+    <div class="total-time" id="tTotal">00:00.00</div>
+    <div style="height:1px; background:#333; margin:10px 20px;"></div>
+    <div class="timer-label" style="margin-top:15px; color:var(--accent);">CURRENT LAP 分段</div>
+    <div class="main-time" id="tVal">00:00</div>
   </div>
-
-  <div class="total-time-display">總時長 <span id="tTotal">00:00</span></div>
-  <div id="tVal">00:00.0</div> <div class="timer-controls">
-    <button class="ghost" id="tAction" onclick="timerAct()">開始</button>
-    <button class="warn" onclick="timerLapReset()" id="tLapReset">計圈</button>
+  <div class="timer-controls">
+    <button class="btn-start" id="tAction" onclick="timerAct()">開始</button>
+    <button class="btn-secondary" onclick="timerLapReset()" id="tLapReset">計圈</button>
   </div>
-
-  <div class="laps-container" id="lapsList">
-    </div>
+  <div style="height:20px;"></div>
+  <div class="laps-wrapper">
+    <div class="laps-header"><span>圈數 (LAP)</span><span>時間 (TIME)</span></div>
+    <ul class="laps-list" id="lapsList"></ul>
+  </div>
 </div>
 
 <div class="shell">
-  <h1>ZIP LOG <span style="font-size:0.8rem; color:var(--accent);">/// SYSTEM V13</span></h1>
+  <h1>ZIP LOG</h1>
 
   <section>
-    <h2 style="margin-bottom:1rem;">SESSION_TIME <small>時間</small></h2>
+    <h2>日期與時段 <small>DATE & RANGE</small></h2>
     <div class="row">
-      <div><label>重訓開始</label><div class="time-field"><input type="time" id="wtStart"><button class="ghost sm" onclick="setNow('wtStart')">現在</button></div></div>
-      <div><label>重訓結束</label><div class="time-field"><input type="time" id="wtEnd"><button class="ghost sm" onclick="setNow('wtEnd')">現在</button></div></div>
+        <div><label>日期 (Date)</label><input type="date" id="dateVal"></div>
+        <div><label>總區間 (Auto Range)</label><input type="text" id="timeRange" placeholder="例 19:00 - 21:00"></div>
     </div>
-    <div style="text-align:right; color:var(--muted); font-size:0.7rem;" id="wtDur">持續時間: 0 分鐘</div>
   </section>
 
   <section>
-    <h2>RESISTANCE <small>重訓</small></h2>
+    <h2>重訓 <small>RESISTANCE</small></h2>
+    <div class="row">
+      <div><label>重訓開始</label><div class="time-field"><input type="time" id="wtStart" oninput="autoTimeRange()"><button class="ghost sm" onclick="setNow('wtStart')">現在</button></div></div>
+      <div><label>重訓結束</label><div class="time-field"><input type="time" id="wtEnd" oninput="autoTimeRange()"><button class="ghost sm" onclick="setNow('wtEnd')">現在</button></div></div>
+    </div>
+    <div style="text-align:right; color:var(--text-sub); font-size:0.8rem; margin-bottom:15px;" id="wtDur">持續時間: 0 分鐘</div>
+    
     <div id="exerciseList"></div>
     <button class="add-btn" onclick="addExercise()">[+] 新增動作</button>
   </section>
 
   <section>
-    <h2>CARDIO <small>有氧</small></h2>
+    <h2>有氧 <small>CARDIO</small></h2>
     <div class="row" style="margin-bottom:15px; border-bottom:1px dashed #333; padding-bottom:15px;">
-       <div><label>有氧開始</label><div class="time-field"><input type="time" id="caStart"><button class="ghost sm" onclick="setNow('caStart')">現在</button></div></div>
-       <div><label>有氧結束</label><div class="time-field"><input type="time" id="caEnd"><button class="ghost sm" onclick="setNow('caEnd')">現在</button></div></div>
+       <div><label>有氧開始</label><div class="time-field"><input type="time" id="caStart" oninput="autoTimeRange()"><button class="ghost sm" onclick="setNow('caStart')">現在</button></div></div>
+       <div><label>有氧結束</label><div class="time-field"><input type="time" id="caEnd" oninput="autoTimeRange()"><button class="ghost sm" onclick="setNow('caEnd')">現在</button></div></div>
     </div>
     <div id="cardioList"></div>
     <button class="add-btn" onclick="addCardio()">[+] 新增有氧</button>
@@ -140,34 +157,35 @@
   </section>
 
   <section>
-    <h2>NUTRITION <small>飲食</small></h2>
-    <label class="sub-label">BREAKFAST 早餐</label>
+    <h2>飲食紀錄 <small>NUTRITION</small></h2>
+    
+    <label class="sub-label">早餐</label>
     <div id="listBreakfast"></div><button class="add-btn sm" onclick="addFood('listBreakfast', 'breakfast-options')">[+] 新增</button>
 
-    <label class="sub-label">LUNCH 午餐</label>
+    <label class="sub-label">午餐</label>
     <div id="listLunch"></div><button class="add-btn sm" onclick="addFood('listLunch', 'lunch-options')">[+] 新增</button>
 
-    <label class="sub-label">SNACK 下午茶</label>
+    <label class="sub-label">下午茶</label>
     <div id="listSnack"></div><button class="add-btn sm" onclick="addFood('listSnack', 'snack-options')">[+] 新增</button>
 
-    <label class="sub-label">PRE-WORKOUT 運動前</label>
+    <label class="sub-label">運動前補給</label>
     <div id="listPre"></div><button class="add-btn sm" onclick="addFood('listPre', 'pre-options')">[+] 新增</button>
 
-    <label class="sub-label">POST / DINNER 晚餐/後</label>
+    <label class="sub-label">晚餐 / 運動後</label>
     <div id="listPost"></div><button class="add-btn sm" onclick="addFood('listPost', 'post-options')">[+] 新增</button>
 
-    <div style="margin-top:20px; border-top:1px solid #333; padding-top:10px;">
-        <label class="sub-label">HYDRATION 飲水 (ML)</label>
+    <div style="margin-top:25px; padding-top:15px; border-top:1px solid #333;">
+        <label class="sub-label" style="border:none; color:var(--text-main);">飲水總量 (ML)</label>
         <div class="row">
             <input type="number" id="wWork" placeholder="運動飲水" oninput="calcWater()">
             <input type="number" id="wDay" placeholder="日常飲水" oninput="calcWater()">
         </div>
-        <div style="text-align:right; color:var(--sec); font-size:0.9rem;" id="wTotal">總計: 0 ML</div>
+        <div style="text-align:right; color:var(--accent); font-size:0.95rem; font-weight:bold;" id="wTotal">總計: 0 ML</div>
     </div>
   </section>
 
   <section>
-    <h2>NOTES <small>備註</small></h2>
+    <h2>備註 <small>NOTES</small></h2>
     <textarea id="note" placeholder="紀錄今日身體狀況..."></textarea>
   </section>
 </div>
@@ -196,19 +214,25 @@
 <template id="cardio-options"><option value="">— 選擇項目 —</option><option>滑步機</option><option>階梯機</option><option>踏步機</option><option>躺式腳踏車</option><option>直立腳踏車</option><option>跑步機</option><option value="__custom__">自訂...</option></template>
 <template id="breakfast-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>烤土司</option><option>全家 葡萄吐司2片</option><option>荷包蛋</option><option>滷蛋</option><option>林鳳營希臘式優格(原味無糖)</option><option>烤地瓜(冰)</option><option>烤地瓜(熱)</option><option>蘿蔔糕</option><option>叉燒包</option><option>肉桂捲</option><option value="__custom__">自訂...</option></template>
 <template id="lunch-options"><option value="">— 選擇食物 —</option><option>能量小姐-水煮嫩雞胸</option><option>能量小姐-香滷雞腿</option><option>能量小姐-日式壽喜牛便當</option><option>能量小姐-照燒雞腿排</option><option>竹林便當-香酥大雞排飯</option><option>竹林便當-厚切豬排飯</option><option>天天烤肉-招牌烤肉飯</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>炒飯</option><option>愛面煮（紅燒牛肉風味）</option><option>氣炸雞胸肉</option><option>醬燒雞胸肉</option><option>三杯雞</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option value="__custom__">自訂...</option></template>
-<template id="snack-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳可可口味</option><option>水果（芭樂）</option><option>餅乾／小點心</option><option>原味優格</option><option>林鳳營 希臘式優格(原味無糖)</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
-<template id="pre-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>手沖咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>光泉 優質蛋白牛乳 巧克力口味 </option><option>福樂 超能蛋白營養牛乳 可可口味</option><option>福樂 超能蛋白營養牛乳 咖啡口味</option><option>烤地瓜 (冰)</option><option>烤地瓜 (熱)</option><option>全家 葡萄吐司</option><option>全家 大亨堡 (原味熱狗+番茄醬酸黃瓜醬)</option><option>香蕉</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
-<template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
+<template id="snack-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳可可口味 (375 mL)</option><option>水果（芭樂）</option><option>餅乾／小點心</option><option>原味優格</option><option>林鳳營 希臘式優格(原味無糖)</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
+<template id="pre-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>手沖咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>光泉 優質蛋白牛乳 巧克力口味 (400ml)</option><option>福樂 超能蛋白營養牛乳 可可口味 (375 mL)</option><option>福樂 超能蛋白營養牛乳 咖啡口味 (375 mL)</option><option>烤地瓜 (冰)</option><option>烤地瓜 (熱)</option><option>全家 葡萄吐司2片</option><option>全家 大亨堡 (原味熱狗+番茄醬酸黃瓜醬)</option><option>香蕉</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
+<template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）185g</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
 
 <script>
-const KEY = 'ZIP_LOG_V13_DATA';
-let tInt=null, totalStartTime=0, lapStartTime=0, tTotalElapsed=0;
-let laps = [];
+const KEY = 'ZIP_LOG_V16_DATA';
+let tInt=null, totalStartTime=0, lapStartTime=0, tTotalElapsed=0, laps=[];
 
+// === 單位判斷 ===
 function checkUnit(v, u) {
   const m = { 'ml':['咖','茶','飲','水','湯','奶','酒','樂','乳'], '顆':['蛋','果','橘','柳','奇','餃','錠','椰'], 'g':['雞','牛','豬','魚','肉','飯','瓜','薯','菜','格','蛋白'], '片':['吐','餅','起','糕','排'], '份':['便','餐','堡','治','麵'] };
   for(const [k, arr] of Object.entries(m)) if(arr.some(x => v.includes(x))) { u.value = k; break; }
 }
+
+// === DOM ===
+const val=s=>document.querySelector(s)?.value||''; 
+const set=(s,v)=>{const e=document.querySelector(s);if(e)e.value=v||''}; 
+const getAll=s=>[...document.querySelectorAll(s)]; 
+const pad=n=>String(n).padStart(2,'0');
 
 function createRow(tid, ph, vals={}) {
   const div = document.createElement('div');
@@ -246,9 +270,10 @@ function addFood(lid, tid, d={}) {
 function getName(r) { const s=r.querySelector('select'), c=r.querySelector('.custom-input'); return s.value==='__custom__'?c.value:s.value; }
 function v(p,s) { return p.querySelector(s)?.value||''; }
 
-// === 核心存檔 (Save) ===
+// === IO ===
 function save(silent=true) {
   const d = {
+    dateVal: val('#dateVal'), timeRange: val('#timeRange'), // 新增日期與時段
     wtStart:val('#wtStart'), wtEnd:val('#wtEnd'), caStart:val('#caStart'), caEnd:val('#caEnd'), stretch:val('#stretch'), wWork:val('#wWork'), wDay:val('#wDay'), note:val('#note'),
     exs: getAll('#exerciseList .item-row').map(r=>({ n:getName(r), s:v(r,'.s'), r:v(r,'.r'), w:v(r,'.w'), rt:v(r,'.rt') })),
     cardios: getAll('#cardioList .item-row').map(r=>({ n:getName(r), dur:v(r,'.dur'), lv:v(r,'.lv'), bpm:v(r,'.bpm') })),
@@ -260,10 +285,20 @@ function save(silent=true) {
 }
 function getF(id) { return getAll(`#${id} .food-row`).map(r=>({ n:getName(r), a:v(r,'.amt'), u:v(r,'.unit') })); }
 
-// === 讀取 (Load) ===
 function load() {
-  const raw = localStorage.getItem(KEY); if(!raw){ addExercise(); return; }
+  const raw = localStorage.getItem(KEY);
+  if(!raw){ 
+    // New User / Empty: Set Today
+    document.getElementById('dateVal').valueAsDate = new Date();
+    addExercise(); 
+    return; 
+  }
   const d = JSON.parse(raw);
+  
+  // 載入日期與時段 (如果有的話)，若沒紀錄則預設今天
+  if(d.dateVal) set('#dateVal', d.dateVal); else document.getElementById('dateVal').valueAsDate = new Date();
+  set('#timeRange', d.timeRange);
+
   set('#wtStart',d.wtStart); set('#wtEnd',d.wtEnd); set('#caStart',d.caStart); set('#caEnd',d.caEnd); 
   set('#stretch',d.stretch); set('#wWork',d.wWork); set('#wDay',d.wDay); set('#note',d.note);
   
@@ -273,127 +308,82 @@ function load() {
   const rf = (lid,tid,lst) => { document.getElementById(lid).innerHTML=''; if(lst) lst.forEach(x=>addFood(lid,tid,x)); };
   if(d.foods) { rf('listBreakfast','breakfast-options',d.foods.bf); rf('listLunch','lunch-options',d.foods.lu); rf('listSnack','snack-options',d.foods.sn); rf('listPre','pre-options',d.foods.pre); rf('listPost','post-options',d.foods.post); }
   
-  // 碼表邏輯還原
   if(d.timer) { 
     tTotalElapsed = d.timer.totalElapsed || 0;
     laps = d.timer.laps || [];
     renderLaps();
-    
-    if(d.timer.running) {
-        totalStartTime = d.timer.totalStart;
-        lapStartTime = d.timer.lapStart;
-        startT();
-    } else {
-        // 暫停狀態：顯示最後紀錄
-        let now = Date.now(); 
-        // 這裡只顯示靜態數字，不需要計算，因為已經暫停
-        updT(0, tTotalElapsed); 
-        // 如果有 lap 正在跑，要顯示 lap 的累計
-        if (lapStartTime > 0 && !d.timer.running) {
-           // 複雜情況：暫停時 lapStartTime 應該被清空或保存當下值？
-           // 簡化：暫停時只顯示 00:00 待命
-        }
-    }
+    if(d.timer.running) { totalStartTime = d.timer.totalStart; lapStartTime = d.timer.lapStart; startT(); } 
+    else { updT(0, tTotalElapsed); }
   }
   calcTime(); calcWater();
 }
 
-// === 碼表邏輯 (分段計時) ===
-function fmtT(ms) { return `${pad(Math.floor(ms/60000))}:${pad(Math.floor((ms%60000)/1000))}.${String(Math.floor((ms%1000)/100))}`; } // Simplified 1 digit ms
+// === 智慧自動抓頭尾 (Auto Range) ===
+function autoTimeRange() {
+    // 收集所有時間點
+    const times = [
+        val('#wtStart'), val('#wtEnd'), 
+        val('#caStart'), val('#caEnd')
+    ].filter(t => t !== ""); // 過濾掉沒填的
+
+    if (times.length >= 2) {
+        // 排序時間字串
+        times.sort();
+        const start = times[0];
+        const end = times[times.length - 1];
+        // 自動填入
+        set('#timeRange', `${start} - ${end}`);
+    }
+}
+
+// === Timer ===
+function fmtT(ms, showMs=true) { 
+    const m = Math.floor(ms/60000); const s = Math.floor((ms%60000)/1000);
+    if(!showMs) return `${pad(m)}:${pad(s)}`;
+    const cs = Math.floor((ms%1000)/10);
+    return `${pad(m)}:${pad(s)}.${pad(cs)}`;
+}
 function updT(lapMs, totalMs) {
-  document.getElementById('tVal').innerText = fmtT(lapMs); // Big number: Current Lap
-  document.getElementById('tTotal').innerText = fmtT(totalMs); // Small number: Total
+  document.getElementById('tVal').innerText = fmtT(lapMs, false); 
+  document.getElementById('tTotal').innerText = fmtT(totalMs); 
   document.getElementById('timerBtn').innerText = String(Math.floor((lapMs%60000)/1000)).padStart(2,'0');
 }
-
 function startT() {
-  const btn = document.getElementById('tAction');
-  const btn2 = document.getElementById('tLapReset');
-  btn.innerText = "暫停"; btn.className = "warn";
-  btn2.innerText = "計圈"; // Running -> Lap
-  
-  tInt = setInterval(() => {
-    const now = Date.now();
-    const currentLapTime = now - lapStartTime;
-    const currentTotalTime = tTotalElapsed + (now - totalStartTime);
-    updT(currentLapTime, currentTotalTime);
-  }, 50);
+  const btn = document.getElementById('tAction'); btn.innerText = "暫停"; btn.className = "btn-pause"; document.getElementById('tLapReset').innerText = "計圈"; 
+  tInt = setInterval(() => { const now = Date.now(); updT(now - lapStartTime, tTotalElapsed + (now - totalStartTime)); }, 50);
 }
-
 function timerAct() {
-  if(tInt) { // Pause
-    clearInterval(tInt); tInt = null;
-    tTotalElapsed += Date.now() - totalStartTime;
-    document.getElementById('tAction').innerText = "繼續"; document.getElementById('tAction').className = "ghost";
-    document.getElementById('tLapReset').innerText = "重置"; // Paused -> Reset
-    save(true);
-  } else { // Start
-    if(totalStartTime === 0 || document.getElementById('tAction').innerText === "開始") {
-        // Fresh Start
-        totalStartTime = Date.now();
-        lapStartTime = Date.now(); 
-        tTotalElapsed = 0;
-        laps = [];
-        renderLaps();
-    } else {
-        // Resume
-        totalStartTime = Date.now(); // Reset base for calc
-        lapStartTime = Date.now() - (parseMs(document.getElementById('tVal').innerText)); // Offset lap start
-        // Adjust total start to account for pause is handled by tTotalElapsed logic
-    }
-    startT();
-  }
+  if(tInt) { clearInterval(tInt); tInt = null; tTotalElapsed += Date.now() - totalStartTime; document.getElementById('tAction').innerText = "繼續"; document.getElementById('tAction').className = "btn-start"; document.getElementById('tLapReset').innerText = "重置"; save(true); }
+  else { if(totalStartTime === 0 || document.getElementById('tAction').innerText === "開始") { totalStartTime = Date.now(); lapStartTime = Date.now(); tTotalElapsed = 0; laps = []; renderLaps(); } else { totalStartTime = Date.now(); lapStartTime = Date.now() - (parseMs(document.getElementById('tVal').innerText)); } startT(); }
 }
-
-// 輔助：解析顯示的時間字串回毫秒 (for resume accuracy)
-function parseMs(str) {
-    let parts = str.split(':');
-    let secs = parts[1].split('.');
-    return (parseInt(parts[0])*60000) + (parseInt(secs[0])*1000) + (parseInt(secs[1])*100);
-}
-
+function parseMs(str) { let parts = str.split(':'); return (parseInt(parts[0])*60000) + (parseInt(parts[1])*1000); }
 function timerLapReset() {
-  if(tInt) { // Lap (Running)
-    const now = Date.now();
-    const thisLap = now - lapStartTime;
-    laps.unshift(thisLap); // Save lap time
-    renderLaps();
-    lapStartTime = now; // Reset lap timer to 0
-    // Total time keeps running, don't touch totalStartTime
-  } else { // Reset (Paused)
-    tTotalElapsed = 0; totalStartTime = 0; lapStartTime = 0; laps = [];
-    updT(0, 0);
-    document.getElementById('lapsList').innerHTML='';
-    document.getElementById('tAction').innerText="開始";
-    document.getElementById('tLapReset').innerText="計圈";
-    save(true);
-  }
+  if(tInt) { laps.unshift(Date.now() - lapStartTime); renderLaps(); lapStartTime = Date.now(); } 
+  else { tTotalElapsed = 0; totalStartTime = 0; lapStartTime = 0; laps = []; updT(0, 0); document.getElementById('lapsList').innerHTML=''; document.getElementById('tAction').innerText="開始"; document.getElementById('tAction').className="btn-start"; document.getElementById('tLapReset').innerText="計圈"; save(true); }
 }
-
-function renderLaps() {
-  document.getElementById('lapsList').innerHTML = laps.map((t,i) => 
-    `<div class="lap-row"><span>圈 ${laps.length-i}</span><span>${fmtT(t)}</span></div>`
-  ).join('');
-}
+function renderLaps() { document.getElementById('lapsList').innerHTML = laps.map((t,i) => `<li class="lap-row"><span>圈 ${laps.length-i}</span><span>${fmtT(t)}</span></li>`).join(''); }
 function toggleTimer() { document.getElementById('timerPanel').classList.toggle('show'); }
 
 // === Reset & Copy ===
 function forceReset() {
   if(confirm('⚠️ 確定要清空並開始新的一天嗎？')) {
     localStorage.removeItem(KEY);
-    document.querySelectorAll('input').forEach(i=>i.value=''); document.querySelectorAll('textarea').forEach(t=>t.value='');
-    document.querySelectorAll('.item-row, .food-row').forEach(r=>r.remove());
-    document.getElementById('wTotal').innerText='總計: 0 ML'; document.getElementById('wtDur').innerText='持續時間: 0 分鐘';
-    timerAct(); if(tInt) timerAct(); timerLapReset(); // Stop and reset timer
     location.reload();
   }
 }
-
 async function genText() {
-  save(true); const d=JSON.parse(localStorage.getItem(KEY)); const dt=new Date();
-  let t=`📅 ${dt.getFullYear()}/${dt.getMonth()+1}/${dt.getDate()} 訓練日誌\n──────────────────\n⏰ 訓練時間\n• ${d.wtStart} - ${d.wtEnd} (共 ${document.getElementById('wtDur').innerText.replace('持續時間: ','')})\n`;
+  save(true); const d=JSON.parse(localStorage.getItem(KEY)); 
+  // 使用者輸入的日期，若無則顯示今天
+  const dateStr = d.dateVal ? d.dateVal.replace(/-/g, '/') : new Date().toLocaleDateString();
+  
+  let t=`📅 ${dateStr} 訓練日誌\n──────────────────\n`;
+  
+  // 判斷時間顯示：優先使用 TimeRange，若無則用重訓時間
+  const timeShow = d.timeRange ? d.timeRange : (d.wtStart ? `${d.wtStart} - ${d.wtEnd}` : '');
+  if(timeShow) t += `⏰ 時間: ${timeShow}\n`;
+  
   if(d.exs.some(x=>x.n)) { t+=`\n🏋️ 重訓項目\n`; d.exs.forEach(x=>{if(x.n)t+=`• ${x.n}｜${x.s}組×${x.r}次｜${x.w}kg${x.rt?` (休${x.rt}s)`:''}\n`}); }
-  if(d.cardios.some(x=>x.n)||val('#caStart')) { t+=`\n🏃 有氧與伸展\n`; if(val('#caStart'))t+=`• 時間: ${val('#caStart')} - ${val('#caEnd')}\n`; d.cardios.forEach(x=>{if(x.n)t+=`• ${x.n}｜${x.dur}分 (Lv.${x.lv}/${x.bpm}bpm)\n`}); if(val('#stretch'))t+=`• 伸展: ${val('#stretch')} 分鐘\n`; }
+  if(d.cardios.some(x=>x.n)||val('#caStart')) { t+=`\n🏃 有氧與伸展\n`; d.cardios.forEach(x=>{if(x.n)t+=`• ${x.n}｜${x.dur}分 (Lv.${x.lv}/${x.bpm}bpm)\n`}); if(val('#stretch'))t+=`• 伸展: ${val('#stretch')} 分鐘\n`; }
   t+=`\n🥗 飲食紀錄\n`;
   const ft=(l,h)=>{ if(l.some(x=>x.n)){ t+=`[${h}] `; t+=l.filter(x=>x.n).map(x=>`${x.n} ${x.a}${x.u}`).join('、')+'\n'; } };
   ft(d.foods.bf,'早餐'); ft(d.foods.lu,'午餐'); ft(d.foods.sn,'午茶'); ft(d.foods.pre,'運前'); ft(d.foods.post,'運後');
@@ -406,10 +396,9 @@ async function genText() {
 function manualSave() { save(false); }
 setInterval(()=>save(true), 900000);
 window.addEventListener('visibilitychange', ()=>{if(document.hidden)save(true)});
-function setNow(id) { const n=new Date(); document.getElementById(id).value=`${pad(n.getHours())}:${pad(n.getMinutes())}`; calcTime(); }
+function setNow(id) { const n=new Date(); document.getElementById(id).value=`${pad(n.getHours())}:${pad(n.getMinutes())}`; calcTime(); autoTimeRange(); } // Added autoTimeRange trigger
 function calcTime() { const d=(s,e)=>{if(!s||!e)return 0; const [h1,m1]=s.split(':').map(Number); const [h2,m2]=e.split(':').map(Number); return Math.max(0,(h2*60+m2)-(h1*60+m1));}; document.getElementById('wtDur').innerText=`持續時間: ${d(val('#wtStart'),val('#wtEnd'))} 分鐘`; }
 function calcWater() { document.getElementById('wTotal').innerText=`總計: ${(Number(val('#wWork'))||0)+(Number(val('#wDay'))||0)} ML`; }
-const val=s=>document.querySelector(s)?.value||''; const set=(s,v)=>{const e=document.querySelector(s);if(e)e.value=v||''}; const getAll=s=>[...document.querySelectorAll(s)]; const pad=n=>String(n).padStart(2,'0');
 load();
 </script>
 </body>
