@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZiP TACTICAL LOG /// v18</title>
+<title>ZiP TACTICAL LOG /// v17</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V18 (Layout Fix) === */
+  /* === ESPORTS THEME V17 (Layout Fixed) === */
   :root {
     --bg: #121212;
     --card: #1e1e1e;
@@ -22,6 +22,7 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Roboto Mono', monospace;
     margin: 0; padding: 1.2rem; 
+    /* 修正點 1: 底部留白加大，防止按鈕擋住內容 */
     padding-bottom: 220px; 
     background-color: var(--bg); color: var(--text-main); 
     display: flex; justify-content: center;
@@ -29,6 +30,7 @@
   }
   .shell { width: 100%; max-width: 600px; }
 
+  /* 修正點 2: 標題排版優化，避免換行過醜 */
   h1 { 
     font-size: 1.5rem; text-align: center; margin: 10px 0 1.5rem; 
     letter-spacing: 2px; color: var(--text-sub); font-weight: 700;
@@ -40,15 +42,11 @@
     background: var(--card); border: 1px solid var(--border); border-radius: 8px;
     margin-bottom: 1.2rem; padding: 1.4rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2);
   }
-  
-  /* 修正點 1: 加大標題下方的距離，避免擁擠 */
   h2 { 
-    font-size: 0.95rem; margin: 0 0 20px 0; display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.95rem; margin: 0 0 15px 0; display: flex; justify-content: space-between; align-items: center;
     color: var(--text-main); font-weight: 600; border-left: 4px solid var(--accent); padding-left: 12px; letter-spacing: 1px;
   }
   h2 small { font-size: 0.75rem; color: var(--text-sub); font-weight: 400; }
-
-  label { display: block; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 6px; font-family: 'Roboto Mono'; }
   .sub-label { font-size: 0.8rem; color: var(--accent); margin-top: 20px; margin-bottom: 8px; display:block; font-weight:bold; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
 
   input, select, textarea {
@@ -57,11 +55,9 @@
   }
   input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #222; }
   
-  /* 預設雙欄 (重訓、飲食那邊用) */
+  /* 修正點 3: 日期欄位在小螢幕時自動換行，防止擠壓 */
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
-  
-  /* 修正點 2: 強制頂部日期區塊使用單欄 (100% 寬度)，解決重疊 */
-  .row-stack { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 10px; }
+  @media (max-width: 360px) { .row { grid-template-columns: 1fr; } }
 
   .time-field { display: flex; gap: 8px; }
   
@@ -80,19 +76,22 @@
   button.sm { width: auto; padding: 8px 12px; font-size: 0.8rem; min-width: 50px; }
   .del-btn { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; background: #333; color: #aaa; padding: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
 
+  /* 底部工具列 */
   .float-action { 
     position: fixed; bottom: 0; left: 0; width: 100%; 
     background: rgba(25, 25, 25, 0.95); backdrop-filter: blur(20px); 
     padding: 15px 20px; border-top: 1px solid #444; 
     display: grid; grid-template-columns: 60px 1fr 1fr; gap: 12px; z-index: 90; 
+    /* 增加陰影讓它跟內容區分開 */
     box-shadow: 0 -5px 20px rgba(0,0,0,0.8);
   }
   .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; }
   .float-action button.main { background: var(--accent); color: #000; font-weight: 700; }
 
-  /* === TIMER UI === */
+  /* === TIMER UI (保留原樣，微調位置) === */
   #timerBtn { 
-    position: fixed; bottom: 110px; right: 20px; z-index: 99; width: 68px; height: 68px; 
+    position: fixed; bottom: 110px; /* 稍微往上移，避免太貼工具列 */ 
+    right: 20px; z-index: 99; width: 68px; height: 68px; 
     background: var(--card); border: 2px solid var(--accent); color: var(--accent); 
     display: flex; align-items: center; justify-content: center; 
     font-size: 22px; font-weight: 700; border-radius: 50%; 
@@ -149,11 +148,11 @@
 </div>
 
 <div class="shell">
-  <h1>ZiP TACTICAL LOG /// v18</h1>
+  <h1>ZiP TACTICAL LOG /// v17</h1>
 
   <section>
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
-    <div class="row-stack">
+    <div class="row">
         <div><label>日期 (Date)</label><input type="date" id="dateVal"></div>
         <div><label>總區間 (Auto Range)</label><input type="text" id="timeRange" placeholder="例 19:00 - 21:00"></div>
     </div>
@@ -245,7 +244,7 @@
 <template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）185g</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
 
 <script>
-const KEY = 'ZIP_LOG_V18_DATA';
+const KEY = 'ZIP_LOG_V17_DATA';
 let tInt=null, totalStartTime=0, lapStartTime=0, tTotalElapsed=0, laps=[];
 
 // === 單位判斷 ===
