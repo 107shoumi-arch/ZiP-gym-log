@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZIP LOG /// SYSTEM V10</title>
+<title>ZIP LOG /// SYSTEM V11</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V10 === */
+  /* === ESPORTS THEME V11 === */
   :root {
     --bg: #050505;
     --panel: #111;
@@ -80,6 +80,7 @@
   button:active { transform: translateY(2px); }
   button.ghost { background: rgba(0,255,195,0.1); color: var(--accent); border: 1px solid rgba(0,255,195,0.3); }
   button.warn { background: rgba(255,0,85,0.15); color: var(--warn); border: 1px solid var(--warn); }
+  button.danger { background: #330011; color: var(--warn); border: 1px solid var(--warn); margin-top: 20px; padding: 15px; }
   button.sm { width: auto; padding: 4px 10px; font-size: 0.75rem; min-width: 40px; }
   button.add-btn { margin-top: 5px; background: transparent; border: 1px dashed #444; color: #666; clip-path: none; }
   .del-btn { position: absolute; top: 5px; right: 5px; width: 25px; height: 25px; background: transparent; color: #444; padding: 0; font-size: 1rem; clip-path: none; display:flex; justify-content:center; align-items:center;}
@@ -91,7 +92,6 @@
   .float-action button { padding: 15px; background: var(--accent); color: #000; clip-path: polygon(15px 0, 100% 0, 100% 100%, 0 100%, 0 15px); }
   .float-action button.ghost { background: #111; color: var(--text); border: 1px solid #333; }
 
-  /* === 碼表 (Stopwatch) 風格 === */
   #timerBtn {
     position: fixed; bottom: 95px; right: 20px; z-index: 99; width: 64px; height: 64px; 
     background: #000; border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 24px;
@@ -139,12 +139,11 @@
     <button class="warn" onclick="timerLapReset()" id="tLapReset">計圈</button>
   </div>
 
-  <div class="laps-container" id="lapsList">
-    </div>
+  <div class="laps-container" id="lapsList"></div>
 </div>
 
 <div class="shell">
-  <h1>ZIP LOG <span style="font-size:0.8rem; color:var(--accent);">/// SYSTEM V10</span></h1>
+  <h1>ZIP LOG <span style="font-size:0.8rem; color:var(--accent);">/// SYSTEM V11</span></h1>
 
   <section>
     <h2 style="margin-bottom:1rem;">SESSION_TIME <small>時間</small></h2>
@@ -209,6 +208,9 @@
     <h2>NOTES <small>備註</small></h2>
     <textarea id="note" placeholder="紀錄今日身體狀況..."></textarea>
   </section>
+
+  <button class="danger" onclick="resetAll()">🗑️ 重置 (清空所有紀錄)</button>
+
 </div>
 
 <div class="float-action">
@@ -285,7 +287,7 @@
 </template>
 
 <script>
-const KEY = 'ZIP_LOG_V10_DATA';
+const KEY = 'ZIP_LOG_V11_DATA';
 let tInt = null, tStart = 0, tElapsed = 0;
 let laps = [];
 
@@ -406,7 +408,7 @@ function load() {
   calcTime(); calcWater();
 }
 
-// === 碼表邏輯 (Stopwatch + Laps) ===
+// === 碼表邏輯 ===
 function formatTime(ms) {
     const m = Math.floor(ms / 60000);
     const s = Math.floor((ms % 60000) / 1000);
@@ -445,7 +447,7 @@ function timerLapReset() {
     if(tInt) { // Lap
         const now = Date.now();
         const total = tElapsed + (now - tStart);
-        laps.unshift(total); // Add to top
+        laps.unshift(total);
         renderLaps();
     } else { // Reset
         tElapsed = 0; laps = [];
@@ -467,32 +469,31 @@ function renderLaps() {
 }
 function toggleTimer() { document.getElementById('timerPanel').classList.toggle('show'); }
 
-// === 輸出格式優化 ===
+// === 重置功能 (New Day) ===
+function resetAll() {
+    if(confirm('⚠️ 確定要清空所有資料，開始新的一天嗎？\n(目前的紀錄將被清除，請確認已複製)')) {
+        localStorage.removeItem(KEY);
+        location.reload();
+    }
+}
+
+// === 複製功能 ===
 async function genText() {
     save(true); const d = JSON.parse(localStorage.getItem(KEY));
     const date = new Date();
-    
     let t = `📅 ${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()} 訓練日誌\n`;
     t += `──────────────────\n`;
-    t += `⏰ 訓練時間\n`;
-    t += `• ${d.wtStart} - ${d.wtEnd} (共 ${document.getElementById('wtDur').innerText.replace('持續時間: ','')})\n`;
-    
+    t += `⏰ 訓練時間\n• ${d.wtStart} - ${d.wtEnd} (共 ${document.getElementById('wtDur').innerText.replace('持續時間: ','')})\n`;
     if(d.exs.some(x=>x.n)) {
         t += `\n🏋️ 重訓項目\n`;
-        d.exs.forEach(x => {
-            if(x.n) t += `• ${x.n}｜${x.s}組 × ${x.r}次｜${x.w}kg${x.rt?` (休${x.rt}s)`:''}\n`;
-        });
+        d.exs.forEach(x => { if(x.n) t += `• ${x.n}｜${x.s}組 × ${x.r}次｜${x.w}kg${x.rt?` (休${x.rt}s)`:''}\n`; });
     }
-
     if(d.cardios.some(x=>x.n) || val('#caStart')) {
         t += `\n🏃 有氧與伸展\n`;
         if(val('#caStart')) t += `• 時間: ${val('#caStart')} - ${val('#caEnd')}\n`;
-        d.cardios.forEach(x => {
-            if(x.n) t += `• ${x.n}｜${x.dur}分鐘 (Lv.${x.lv} / ${x.bpm}bpm)\n`;
-        });
+        d.cardios.forEach(x => { if(x.n) t += `• ${x.n}｜${x.dur}分鐘 (Lv.${x.lv} / ${x.bpm}bpm)\n`; });
         if(val('#stretch')) t += `• 伸展: ${val('#stretch')} 分鐘\n`;
     }
-
     t += `\n🥗 飲食紀錄\n`;
     const ft = (l,h) => { 
         if(l.some(x=>x.n)) {
@@ -501,18 +502,12 @@ async function genText() {
             t += items.join('、') + '\n';
         }
     };
-    ft(d.foods.bf,'早餐'); ft(d.foods.lu,'午餐'); ft(d.foods.sn,'午茶'); 
-    ft(d.foods.pre,'運前'); ft(d.foods.post,'運後');
-    
+    ft(d.foods.bf,'早餐'); ft(d.foods.lu,'午餐'); ft(d.foods.sn,'午茶'); ft(d.foods.pre,'運前'); ft(d.foods.post,'運後');
     t += `\n💧 飲水總計: ${document.getElementById('wTotal').innerText.replace('總計: ','')}`;
     if(d.note) t += `\n\n📝 備註\n${d.note}`;
 
-    try {
-        await navigator.clipboard.writeText(t);
-        alert('日誌已複製！');
-    } catch (e) {
-        const a = document.getElementById('copyArea'); a.value = t; a.select(); document.execCommand('copy'); alert('日誌已複製！(兼容模式)');
-    }
+    try { await navigator.clipboard.writeText(t); alert('日誌已複製！'); } 
+    catch (e) { const a = document.getElementById('copyArea'); a.value = t; a.select(); document.execCommand('copy'); alert('日誌已複製！(兼容模式)'); }
 }
 
 // Utils
