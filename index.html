@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ZiP TACTICAL LOG /// v27</title>
+<title>ZiP TACTICAL LOG /// v28</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V27 (LAYOUT LOCKED + RESET FIXED) === */
+  /* === ESPORTS THEME V28 (UPDATED) === */
   :root {
     --bg: #121212;
     --card: #1e1e1e;
@@ -27,6 +27,9 @@
     display: flex; justify-content: center;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   }
+  /* 鎖定背景捲動 (配合計時器使用) */
+  body.lock-scroll { overflow: hidden; }
+
   .shell { width: 100%; max-width: 600px; }
 
   h1 { 
@@ -96,7 +99,7 @@
   .float-action button.icon-only { background: #333; color: var(--text-sub); font-size: 1.4rem; height: 50px; }
   .float-action button.main { background: var(--accent); color: #000; font-weight: 700; height: 50px; }
 
-  /* === TIMER UI (v16 全螢幕儀表板) === */
+  /* === TIMER UI (v28 全螢幕修復) === */
   #timerBtn { 
     position: fixed; bottom: 100px; right: 20px; z-index: 99; width: 68px; height: 68px; 
     background: var(--card); border: 2px solid var(--accent); color: var(--accent); 
@@ -110,6 +113,8 @@
     background: rgba(18, 18, 18, 0.98); backdrop-filter: blur(10px); 
     z-index: 999; display: none; flex-direction: column; align-items: center; justify-content: center; 
     padding: 20px; opacity: 0; transition: opacity 0.2s; 
+    /* 修正：防止滑動穿透與瀏覽器彈性效果 */
+    touch-action: none; overscroll-behavior: none;
   }
   #timerPanel.show { display: flex; opacity: 1; }
 
@@ -165,7 +170,7 @@
 </div>
 
 <div class="shell">
-  <h1>ZiP TACTICAL LOG /// v27</h1>
+  <h1>ZiP TACTICAL LOG /// v28</h1>
 
   <section>
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
@@ -195,7 +200,7 @@
     </div>
     <div id="cardioList"></div>
     <button class="add-btn" onclick="addCardio()">[+] 新增有氧</button>
-    <div style="margin-top:15px;"><label>伸展時間 (分鐘)</label><input type="number" id="stretch" placeholder="例如: 15"></div>
+    <div style="margin-top:15px;"><label>伸展時間 (分鐘)</label><input type="number" id="stretch" placeholder="例如: 15" oninput="autoTimeRange()"></div>
   </section>
 
   <section>
@@ -244,7 +249,7 @@
     <optgroup label="背部與上半身">
       <option>分離式坐姿划船機</option><option>坐姿划船機</option><option>高位下拉（寬距）</option><option>高位下拉（窄距）</option>
       <option>高位下拉（窄距反握）</option><option>高位下拉（W把手）</option><option>高位下拉（V把手）</option>
-      <option>蝴蝶機（正面胸推）</option><option>蝴蝶機（反面背飛）</option>
+      <option>蝴蝶機（夾胸）</option><option>蝴蝶機（反面背飛）</option>
     </optgroup>
     <optgroup label="下半身">
       <option>腿部推蹬機</option><option>坐姿勾腿機</option><option>俯臥勾腿機</option>
@@ -254,23 +259,48 @@
     <option value="__custom__">自訂...</option>
 </template>
 <template id="cardio-options"><option value="">— 選擇項目 —</option><option>滑步機</option><option>階梯機</option><option>踏步機</option><option>躺式腳踏車</option><option>直立腳踏車</option><option>跑步機</option><option value="__custom__">自訂...</option></template>
-<template id="breakfast-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>烤土司</option><option>全家 葡萄吐司2片</option><option>荷包蛋</option><option>滷蛋</option><option>林鳳營希臘式優格(原味無糖)</option><option>烤地瓜(冰)</option><option>烤地瓜(熱)</option><option>蘿蔔糕</option><option>叉燒包</option><option>肉桂捲</option><option value="__custom__">自訂...</option></template>
-<template id="lunch-options"><option value="">— 選擇食物 —</option><option>能量小姐-水煮嫩雞胸</option><option>能量小姐-香滷雞腿</option><option>能量小姐-日式壽喜牛便當</option><option>能量小姐-照燒雞腿排</option><option>竹林便當-香酥大雞排飯</option><option>竹林便當-厚切豬排飯</option><option>天天烤肉-招牌烤肉飯</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>炒飯</option><option>愛面煮（紅燒牛肉風味）</option><option>氣炸雞胸肉</option><option>醬燒雞胸肉</option><option>三杯雞</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option value="__custom__">自訂...</option></template>
-<template id="snack-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳可可口味 (375 mL)</option><option>水果（芭樂）</option><option>餅乾／小點心</option><option>原味優格</option><option>林鳳營 希臘式優格(原味無糖)</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
-<template id="pre-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>手沖咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>光泉 優質蛋白牛乳 巧克力口味 (400ml)</option><option>福樂 超能蛋白營養牛乳 可可口味 (375 mL)</option><option>福樂 超能蛋白營養牛乳 咖啡口味 (375 mL)</option><option>烤地瓜 (冰)</option><option>烤地瓜 (熱)</option><option>全家 葡萄吐司2片</option><option>全家 大亨堡 (原味熱狗+番茄醬酸黃瓜醬)</option><option>香蕉</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
-<template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）185g</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
+<template id="breakfast-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>烤土司</option><option>全家 葡萄吐司2片</option><option>御飯糰(燒肉 201cal 4.4g P)</option><option>御飯糰(雞肉 218cal 6.4g P)</option><option>荷包蛋</option><option>滷蛋</option><option>林鳳營希臘式優格(原味無糖)</option><option>烤地瓜(冰)</option><option>烤地瓜(熱)</option><option>蘿蔔糕</option><option>叉燒包</option><option>肉桂捲</option><option value="__custom__">自訂...</option></template>
+<template id="lunch-options"><option value="">— 選擇食物 —</option><option>能量小姐-水煮嫩雞胸</option><option>能量小姐-香滷雞腿</option><option>能量小姐-日式壽喜牛便當</option><option>能量小姐-照燒雞腿排</option><option>竹林便當-香酥大雞排飯</option><option>竹林便當-厚切豬排飯</option><option>天天烤肉-招牌烤肉飯</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>小黃瓜</option><option>沙拉醬(10ml/11cal)</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>炒飯</option><option>愛面煮（紅燒牛肉風味）</option><option>氣炸雞胸肉</option><option>醬燒雞胸肉</option><option>雞絲</option><option>三杯雞</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option value="__custom__">自訂...</option></template>
+<template id="snack-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>堅果蛋白棒(260cal 14g P)</option><option>低糖蛋白棒(132cal 6g P)</option><option>福樂 超能蛋白營養牛乳可可口味 (375 mL)</option><option>水果（芭樂）</option><option>餅乾／小點心</option><option>原味優格</option><option>林鳳營 希臘式優格(原味無糖)</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
+<template id="pre-options"><option value="">— 選擇食物 —</option><option>美式咖啡</option><option>西西里咖啡</option><option>手沖咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>御飯糰(燒肉 201cal 4.4g P)</option><option>御飯糰(雞肉 218cal 6.4g P)</option><option>堅果蛋白棒(260cal 14g P)</option><option>低糖蛋白棒(132cal 6g P)</option><option>光泉 優質蛋白牛乳 巧克力口味 (400ml)</option><option>福樂 超能蛋白營養牛乳 可可口味 (375 mL)</option><option>福樂 超能蛋白營養牛乳 咖啡口味 (375 mL)</option><option>烤地瓜 (冰)</option><option>烤地瓜 (熱)</option><option>全家 葡萄吐司2片</option><option>全家 大亨堡 (原味熱狗+番茄醬酸黃瓜醬)</option><option>香蕉</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
+<template id="post-options"><option value="">— 選擇食物 —</option><option>牛雜湯（只吃料）</option><option>牛排</option><option>花椰菜</option><option>四季豆</option><option>小黃瓜</option><option>沙拉醬(10ml/11cal)</option><option>高麗菜</option><option>馬鈴薯</option><option>白飯</option><option>糙米飯</option><option>醋飯</option><option>氣炸雞胸肉</option><option>雞絲</option><option>御飯糰(燒肉 201cal 4.4g P)</option><option>御飯糰(雞肉 218cal 6.4g P)</option><option>旗魚生魚片</option><option>鮪魚生魚片</option><option>鮭魚生魚片</option><option>鯡魚卵生魚片</option><option>愛之味鮪魚罐頭（水煮）185g</option><option>荷包蛋</option><option>滷蛋</option><option>溏心蛋</option><option>豆薯涼拌</option><option>原味優格</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option><option value="__custom__">自訂...</option></template>
 
 <script>
-const KEY = 'ZIP_LOG_V27_DATA';
+const KEY = 'ZIP_LOG_V28_DATA';
 let tInt=null, totalStartTime=0, lapStartTime=0, tTotalElapsed=0, laps=[];
 
 function checkUnit(v, u) {
-  const m = { 'ml':['咖','茶','飲','水','湯','奶','酒','樂','乳'], '顆':['蛋','果','橘','柳','奇','餃','錠','椰'], 'g':['雞','牛','豬','魚','肉','飯','瓜','薯','菜','格','蛋白'], '片':['吐','餅','起','糕','排'], '份':['便','餐','堡','治','麵'] };
+  const m = { 
+    'ml':['咖','茶','飲','水','湯','奶','酒','樂','乳','醬'], // 新增: 醬
+    '顆':['蛋','果','橘','柳','奇','餃','錠','椰','糰'], // 新增: 糰 (飯糰)
+    'g':['雞','牛','豬','魚','肉','飯','瓜','薯','菜','格','蛋白','豆'], // 新增: 豆
+    '片':['吐','餅','起','糕','排'], 
+    '份':['便','餐','堡','治','麵'],
+    '條':['棒'], // 新增: 條 (蛋白棒)
+    '包':['絲'], // 新增: 包 (雞絲)
+    '盒':[]  // 新增: 盒
+  };
   for(const [k, arr] of Object.entries(m)) if(arr.some(x => v.includes(x))) { u.value = k; break; }
 }
+
 function autoTimeRange() {
     const times = [ val('#wtStart'), val('#wtEnd'), val('#caStart'), val('#caEnd') ].filter(t => t !== ""); 
-    if (times.length >= 2) { times.sort(); set('#timeRange', `${times[0]} - ${times[times.length - 1]}`); }
+    if (times.length < 2 && !val('#stretch')) return;
+    
+    times.sort();
+    let startTime = times[0] || '';
+    let endTime = times[times.length - 1] || '';
+
+    // 計算伸展時間
+    const stretchMin = parseInt(val('#stretch')) || 0;
+    if (stretchMin > 0 && endTime) {
+        const [h, m] = endTime.split(':').map(Number);
+        const date = new Date(); 
+        date.setHours(h, m + stretchMin);
+        endTime = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    if(startTime && endTime) set('#timeRange', `${startTime} - ${endTime}`);
 }
 
 const val=s=>document.querySelector(s)?.value||''; const set=(s,v)=>{const e=document.querySelector(s);if(e)e.value=v||''}; const getAll=s=>[...document.querySelectorAll(s)]; const pad=n=>String(n).padStart(2,'0');
@@ -302,7 +332,8 @@ function addCardio(d={}) {
 function addFood(lid,tid,d={}) {
   const {div}=createRow(tid,'食物名稱',d);
   const c=document.createElement('div'); c.className='food-inputs';
-  c.innerHTML=`<input type="number" class="amt" placeholder="量" value="${d.a||''}"><select class="unit"><option value="g">g</option><option value="ml">ml</option><option value="份">份</option><option value="顆">顆</option><option value="片">片</option></select>`;
+  // 新增 包, 條, 盒 選項
+  c.innerHTML=`<input type="number" class="amt" placeholder="量" value="${d.a||''}"><select class="unit"><option value="g">g</option><option value="ml">ml</option><option value="份">份</option><option value="顆">顆</option><option value="片">片</option><option value="包">包</option><option value="條">條</option><option value="盒">盒</option></select>`;
   if(d.u)c.querySelector('.unit').value=d.u;
   div.append(c); document.getElementById(lid).append(div);
 }
@@ -371,34 +402,30 @@ function timerLapReset() {
   else { tTotalElapsed = 0; totalStartTime = 0; lapStartTime = 0; laps = []; updT(0, 0); document.getElementById('lapsList').innerHTML=''; document.getElementById('tAction').innerText="開始"; document.getElementById('tAction').className="btn-start"; document.getElementById('tLapReset').innerText="計圈"; save(true); }
 }
 function renderLaps() { document.getElementById('lapsList').innerHTML = laps.map((t,i) => `<li class="lap-row"><span>圈 ${laps.length-i}</span><span>${fmtT(t)}</span></li>`).join(''); }
-function toggleTimer() { document.getElementById('timerPanel').classList.toggle('show'); }
+
+// Toggle Timer & Lock Body Scroll
+function toggleTimer() { 
+    const p = document.getElementById('timerPanel');
+    const b = document.body;
+    p.classList.toggle('show'); 
+    if(p.classList.contains('show')) { b.classList.add('lock-scroll'); } else { b.classList.remove('lock-scroll'); }
+}
 
 // === FIXED RESET LOGIC ===
 function forceReset() {
   if(confirm('⚠️ 確定要清空並開始新的一天嗎？\n(目前的紀錄將被清除)')) {
-    // 1. 清除本地儲存
     localStorage.removeItem(KEY);
-    
-    // 2. 手動清空所有輸入框 (防止瀏覽器快取)
     document.querySelectorAll('input').forEach(el => el.value = '');
     document.querySelectorAll('textarea').forEach(el => el.value = '');
-    
-    // 3. 移除動態列表
     document.getElementById('exerciseList').innerHTML = '';
     document.getElementById('cardioList').innerHTML = '';
     document.querySelectorAll('[id^="list"]').forEach(el => el.innerHTML = '');
-
-    // 4. 重置文字顯示
     document.getElementById('wtDur').innerText = '持續時間: 0 分鐘';
     document.getElementById('wTotal').innerText = '總計: 0 ML';
-
-    // 5. 重置碼表變數
     if(tInt) clearInterval(tInt);
     tInt=null; totalStartTime=0; lapStartTime=0; tTotalElapsed=0; laps=[];
     updT(0,0); 
     document.getElementById('lapsList').innerHTML='';
-
-    // 6. 重新載入頁面 (確保乾淨)
     setTimeout(() => location.reload(), 100);
   }
 }
