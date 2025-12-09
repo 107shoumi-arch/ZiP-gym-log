@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-  /* === ESPORTS THEME V30 (CONTENT ORDER UPDATED) === */
+  /* === ESPORTS THEME V30 === */
   :root {
     --bg: #121212;
     --card: #1e1e1e;
@@ -140,7 +140,6 @@
   #toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--accent); color: #000; padding: 15px 30px; font-weight: bold; border-radius: 4px; pointer-events: none; opacity: 0; transition: 0.2s; z-index: 1000; box-shadow: 0 0 20px rgba(0,255,195,0.4); }
   #toast.show { opacity: 1; }
   
-  /* 修正：使用 opacity:0 取代 top:-9999px 以兼容 iOS 複製 */
   #copyArea { position: fixed; bottom: 0; left: 0; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
 </style>
 </head>
@@ -171,7 +170,7 @@
 </div>
 
 <div class="shell">
-  <h1>ZiP TACTICAL LOG /// v30</h1>
+  <h1>ZiP TACTICAL LOG /// v31</h1>
 
   <section>
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
@@ -275,7 +274,7 @@
 
 <template id="breakfast-options">
     <option value="">— 選擇食物 —</option>
-    <option>美式咖啡</option><option>手沖咖啡</option><option>西西里咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳 可可口味 (375 mL)</option>
+    <option>美式咖啡</option><option>西西里咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳 可可口味 (375 mL)</option>
     <option>烤土司</option><option>全家 葡萄吐司2片</option><option>御飯糰(燒肉 201cal 4.4g P)</option><option>御飯糰(雞肉 218cal 6.4g P)</option><option>烤地瓜(冰)</option><option>烤地瓜(熱)</option><option>堅果蛋白棒(260cal 14g P)</option><option>低糖蛋白棒(132cal 6g P)</option><option>蘿蔔糕</option><option>叉燒包</option><option>肉桂捲</option>
     <option>荷包蛋</option><option>滷蛋</option>
     <option>林鳳營希臘式優格(原味無糖)</option>
@@ -293,9 +292,9 @@
 
 <template id="snack-options">
     <option value="">— 選擇食物 —</option>
-    <option>美式咖啡</option><option>手沖咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳可可口味 (375 mL)</option>
+    <option>美式咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳可可口味 (375 mL)</option>
     <option>堅果蛋白棒(260cal 14g P)</option><option>低糖蛋白棒(132cal 6g P)</option><option>乳清蛋白 40g</option><option>乳清蛋白 30g</option>
-    <option>原味優格</option><option>林鳳營 希臘式優格(原味無糖)</option><option>餅乾／小點心</option><option>烤地瓜 (冰)</option><option>烤地瓜 (熱)</option>
+    <option>原味優格</option><option>林鳳營 希臘式優格(原味無糖)</option><option>餅乾／小點心</option>
     <option>水果（芭樂）</option><option>芭樂</option><option>蘋果</option><option>芒果</option><option>水梨</option><option>柳丁</option><option>橘子</option><option>去殼椰子</option><option>藍莓</option><option>釋迦</option>
     <option value="__custom__">自訂...</option>
 </template>
@@ -318,7 +317,6 @@
 </template>
 
 <script>
-// === 修正1：將工具變數與函數移至最上方，避免 Hoisting 問題 ===
 const KEY = 'ZIP_LOG_V30_DATA';
 const val = s => document.querySelector(s)?.value || '';
 const set = (s, v) => { const e = document.querySelector(s); if(e) e.value = v || ''; };
@@ -326,18 +324,19 @@ const getAll = s => [...document.querySelectorAll(s)];
 const pad = n => String(n).padStart(2, '0');
 
 let tInt = null, totalStartTime = 0, lapStartTime = 0, tTotalElapsed = 0, laps = [];
-let lapPausedTime = 0; // 新增：用於記錄暫停時該圈的經過時間
+let lapPausedTime = 0;
 
+// === 修正：優化單位判斷邏輯 ===
 function checkUnit(v, u) {
   const m = { 
     'ml':['咖','茶','飲','水','湯','奶','酒','樂','乳','醬'], 
-    '顆':['蛋','果','橘','柳','奇','餃','錠','椰','糰'], 
+    '顆':['蛋','果','橘','柳','奇','餃','錠','椰','糰','包'], // 增加'包'(叉燒包)
     'g':['雞','牛','豬','魚','肉','飯','瓜','薯','菜','格','蛋白','豆','蔥','丁','泥'], 
     '片':['吐','餅','起','糕','排'], 
-    '份':['便','餐','堡','治','麵'],
+    '份':['便','餐','堡','治','麵','能量小姐','竹林'], // 便當類歸為份
     '條':['棒'], 
     '包':['絲'], 
-    '個':['紙','糰','能量小姐','竹林','飯糰'] 
+    '個':['紙'] // 紙包鮭魚歸為個
   };
   for(const [k, arr] of Object.entries(m)) if(arr.some(x => v.includes(x))) { u.value = k; break; }
 }
@@ -386,10 +385,12 @@ function addCardio(d={}) {
   c.innerHTML=`<input type="number" class="dur" placeholder="分" value="${d.dur||''}"><input type="number" class="lv" placeholder="Lv" value="${d.lv||''}"><input type="number" class="bpm" placeholder="心率" value="${d.bpm||''}">`;
   div.append(c); document.getElementById('cardioList').append(div);
 }
+// === 修正：addFood 的下拉選單補上「個」 ===
 function addFood(lid,tid,d={}) {
   const {div}=createRow(tid,'食物名稱',d);
   const c=document.createElement('div'); c.className='food-inputs';
-  c.innerHTML=`<input type="number" class="amt" placeholder="量" value="${d.a||''}"><select class="unit"><option value="g">g</option><option value="ml">ml</option><option value="份">份</option><option value="顆">顆</option><option value="片">片</option><option value="包">包</option><option value="條">條</option><option value="盒">盒</option></select>`;
+  // 在 select 中增加了 <option value="個">個</option>
+  c.innerHTML=`<input type="number" class="amt" placeholder="量" value="${d.a||''}"><select class="unit"><option value="g">g</option><option value="ml">ml</option><option value="份">份</option><option value="顆">顆</option><option value="片">片</option><option value="包">包</option><option value="條">條</option><option value="盒">盒</option><option value="個">個</option></select>`;
   if(d.u)c.querySelector('.unit').value=d.u;
   div.append(c); document.getElementById(lid).append(div);
 }
@@ -438,22 +439,18 @@ function load() {
         startT(); 
     } 
     else { 
-        // 修正：如果暫停狀態，恢復顯示正確的暫停時間
         updT(lapPausedTime, tTotalElapsed); 
     }
   }
   calcTime(); calcWater();
 }
 
-// === 修正2：日期初始化修正 (解決 UTC 時區問題) ===
 function initDate() {
     const local = new Date();
-    // 手動調整時區偏移，確保 .toISOString() 拿到的是當地時間的 YYYY-MM-DD
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
     document.getElementById('dateVal').value = local.toISOString().slice(0,10);
 }
 
-// Timer Logic Updated
 function fmtT(ms, showMs=true) { 
     const m = Math.floor(ms/60000); const s = Math.floor((ms%60000)/1000);
     if(!showMs) return `${pad(m)}:${pad(s)}`;
@@ -469,32 +466,27 @@ function startT() {
   const btn = document.getElementById('tAction'); btn.innerText = "暫停"; btn.className = "btn-pause"; document.getElementById('tLapReset').innerText = "計圈"; 
   tInt = setInterval(() => { 
       const now = Date.now(); 
-      // 動態計算：當前時間 - 本圈開始時間
       updT(now - lapStartTime, tTotalElapsed + (now - totalStartTime)); 
   }, 50);
 }
 function timerAct() {
   if(tInt) { 
-      // 暫停
       clearInterval(tInt); tInt = null; 
       const now = Date.now();
-      tTotalElapsed += now - totalStartTime; // 累加總經過時間
-      lapPausedTime = now - lapStartTime;    // 記錄這圈跑到哪裡了 (修正精確度問題)
+      tTotalElapsed += now - totalStartTime; 
+      lapPausedTime = now - lapStartTime;    
       
       document.getElementById('tAction').innerText = "繼續"; document.getElementById('tAction').className = "btn-start"; document.getElementById('tLapReset').innerText = "重置"; save(true); 
   }
   else { 
-      // 開始 / 繼續
       const now = Date.now();
       if(totalStartTime === 0 || document.getElementById('tAction').innerText === "開始") { 
-          // 全新開始
           totalStartTime = now; 
           lapStartTime = now; 
           tTotalElapsed = 0; 
           lapPausedTime = 0;
           laps = []; renderLaps(); 
       } else { 
-          // 繼續：總開始時間重算（為了讓公式正確），本圈開始時間 = 現在 - 之前跑了多久
           totalStartTime = now; 
           lapStartTime = now - lapPausedTime; 
       } 
@@ -504,13 +496,11 @@ function timerAct() {
 
 function timerLapReset() {
   if(tInt) { 
-      // 計圈
       const now = Date.now();
       laps.unshift(now - lapStartTime); renderLaps(); 
       lapStartTime = now; 
   } 
   else { 
-      // 重置
       tTotalElapsed = 0; totalStartTime = 0; lapStartTime = 0; lapPausedTime = 0; laps = []; 
       updT(0, 0); 
       document.getElementById('lapsList').innerHTML=''; 
@@ -520,7 +510,6 @@ function timerLapReset() {
 }
 function renderLaps() { document.getElementById('lapsList').innerHTML = laps.map((t,i) => `<li class="lap-row"><span>圈 ${laps.length-i}</span><span>${fmtT(t)}</span></li>`).join(''); }
 
-// Toggle Timer & Lock Body Scroll
 function toggleTimer() { 
     const p = document.getElementById('timerPanel');
     const b = document.body;
@@ -528,7 +517,6 @@ function toggleTimer() {
     if(p.classList.contains('show')) { b.classList.add('lock-scroll'); } else { b.classList.remove('lock-scroll'); }
 }
 
-// === FIXED RESET LOGIC ===
 function forceReset() {
   if(confirm('⚠️ 確定要清空並開始新的一天嗎？\n(目前的紀錄將被清除)')) {
     localStorage.removeItem(KEY);
