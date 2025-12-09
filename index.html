@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ZiP TACTICAL LOG /// v31</title>
+<title>ZiP TACTICAL LOG /// v32</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
@@ -170,7 +170,7 @@
 </div>
 
 <div class="shell">
-  <h1>ZiP TACTICAL LOG /// v31</h1>
+  <h1>ZiP TACTICAL LOG /// v32</h1>
 
   <section>
     <h2>日期與時段 <small>DATE & RANGE</small></h2>
@@ -275,7 +275,7 @@
 <template id="breakfast-options">
     <option value="">— 選擇食物 —</option>
     <option>美式咖啡</option><option>西西里咖啡</option><option>無糖綠茶</option><option>氣泡水</option><option>福樂 超能蛋白營養牛乳 可可口味 (375 mL)</option>
-    <option>烤土司</option><option>全家 葡萄吐司2片</option><option>蘿蔔糕</option><option>白饅頭</option><option>黑饅頭</option><option>芝麻包</option><option>御飯糰(燒肉 201cal 4.4g P)</option><option>御飯糰(雞肉 218cal 6.4g P)</option><option>烤地瓜(冰)</option><option>烤地瓜(熱)</option><option>堅果蛋白棒(260cal 14g P)</option><option>低糖蛋白棒(132cal 6g P)</option><option>蘿蔔糕</option><option>叉燒包</option><option>肉桂捲</option>
+    <option>烤土司</option><option>全家 葡萄吐司2片</option><option>蘿蔔糕</option><option>白饅頭</option><option>黑饅頭</option><option>芝麻包</option><option>御飯糰(燒肉 201cal 4.4g P)</option><option>御飯糰(雞肉 218cal 6.4g P)</option><option>烤地瓜(冰)</option><option>烤地瓜(熱)</option><option>堅果蛋白棒(260cal 14g P)</option><option>低糖蛋白棒(132cal 6g P)</option><option>叉燒包</option><option>肉桂捲</option>
     <option>荷包蛋</option><option>滷蛋</option><option>玉米粒</option><option>花生醬</option><option>無花果醬</option><option>黑醋栗醬</option><option>草莓醬</option>
     <option>林鳳營希臘式優格(原味無糖)</option>
     <option value="__custom__">自訂...</option>
@@ -326,13 +326,15 @@ const pad = n => String(n).padStart(2, '0');
 let tInt = null, totalStartTime = 0, lapStartTime = 0, tTotalElapsed = 0, laps = [];
 let lapPausedTime = 0;
 
-// === 修正：優化單位判斷邏輯，優先判斷份/個/顆，最後才判斷g/ml ===
+// === 修正：優化單位判斷邏輯，加入瓶/罐，並讓包裝飲品優先匹配為「瓶」 ===
 function checkUnit(v, u) {
   const m = { 
-    '份':['便','餐','堡','治','麵','能量小姐','竹林'], // 優先級高
-    '個':['紙'], 
-    '顆':['蛋','果','橘','柳','奇','餃','錠','椰','糰','包'], 
-    'ml':['咖','茶','飲','水','湯','奶','酒','樂','乳','醬'], 
+    '份':['便','餐','堡','治','麵','能量小姐','竹林','愛面煮'], 
+    '瓶':['福樂','光泉','氣泡水','酒'], // 優先匹配包裝飲品
+    '罐':['罐頭','罐'],
+    '個':['紙','塔','派'], 
+    '顆':['蛋','果','橘','柳','奇','餃','錠','椰','糰','包','饅頭'], 
+    'ml':['咖','茶','飲','水','湯','奶','乳','醬'], // 通用液體放後面，避免覆蓋「福樂」
     'g':['雞','牛','豬','魚','肉','飯','瓜','薯','菜','格','蛋白','豆','蔥','丁','泥'], 
     '片':['吐','餅','起','糕','排'], 
     '條':['棒'], 
@@ -386,11 +388,12 @@ function addCardio(d={}) {
   div.append(c); document.getElementById('cardioList').append(div);
 }
 
-// === 修正：addFood 的下拉選單補上「個」，這下選單終於有這個選項了 ===
+// === 修正：addFood 的下拉選單加入「瓶」與「罐」 ===
 function addFood(lid,tid,d={}) {
   const {div}=createRow(tid,'食物名稱',d);
   const c=document.createElement('div'); c.className='food-inputs';
-  c.innerHTML=`<input type="number" class="amt" placeholder="量" value="${d.a||''}"><select class="unit"><option value="g">g</option><option value="ml">ml</option><option value="份">份</option><option value="顆">顆</option><option value="片">片</option><option value="包">包</option><option value="條">條</option><option value="盒">盒</option><option value="個">個</option></select>`;
+  // 在 select 中增加了 <option value="瓶">瓶</option> 與 <option value="罐">罐</option>
+  c.innerHTML=`<input type="number" class="amt" placeholder="量" value="${d.a||''}"><select class="unit"><option value="g">g</option><option value="ml">ml</option><option value="份">份</option><option value="顆">顆</option><option value="片">片</option><option value="包">包</option><option value="條">條</option><option value="盒">盒</option><option value="個">個</option><option value="瓶">瓶</option><option value="罐">罐</option></select>`;
   if(d.u)c.querySelector('.unit').value=d.u;
   div.append(c); document.getElementById(lid).append(div);
 }
